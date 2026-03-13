@@ -34,15 +34,32 @@ from .entity import MetarEntity
 PARALLEL_UPDATES = 0
 
 
+def _c_to_f(celsius: float | None) -> float | None:
+    """Convert Celsius to Fahrenheit, rounded to one decimal place."""
+    if celsius is None:
+        return None
+    return round(celsius * 9 / 5 + 32, 1)
+
+
+def _hpa_to_inhg(hpa: float | None) -> float | None:
+    """Convert hectopascals to inches of mercury, rounded to two decimal places."""
+    if hpa is None:
+        return None
+    return round(hpa * 0.02953, 2)
+
+
 @dataclass(frozen=True, kw_only=True)
 class MetarSensorEntityDescription(SensorEntityDescription):
     """Extends SensorEntityDescription with a value extractor function.
 
     value_fn receives the normalized coordinator data dict and returns the
     sensor's native value (or None when the field is absent/not reported).
+    station_prefix controls whether the station ID is prepended to the display
+    name (default True). Set to False for sensors whose name is self-contained.
     """
 
     value_fn: Callable[[dict], Any]
+    station_prefix: bool = True
 
 
 # ---------------------------------------------------------------------------
@@ -53,6 +70,16 @@ class MetarSensorEntityDescription(SensorEntityDescription):
 # ---------------------------------------------------------------------------
 
 SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
+
+    # --- Station identification ---
+    MetarSensorEntityDescription(
+        key="station_name",
+        name="Station Name",
+        icon="mdi:map-marker",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        station_prefix=False,
+        value_fn=lambda d: d.get("station_name"),
+    ),
 
     # --- Flight category ---
     MetarSensorEntityDescription(
@@ -133,81 +160,168 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
     ),
 
     # --- Temperature ---
+    # Celsius pairs: METAR natively reports temperatures in Celsius.
+    # Fahrenheit pairs added so both units are always available regardless of
+    # the HA system unit setting.
     MetarSensorEntityDescription(
         key="temperature",
         name="Temperature",
         icon="mdi:thermometer",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda d: d.get("temperature"),
+    ),
+    MetarSensorEntityDescription(
+        key="temperature_f",
+        name="Temperature (F)",
+        icon="mdi:thermometer",
+        native_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        suggested_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda d: _c_to_f(d.get("temperature")),
     ),
     MetarSensorEntityDescription(
         key="dewpoint",
         name="Dewpoint",
         icon="mdi:thermometer-water",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda d: d.get("dewpoint"),
+    ),
+    MetarSensorEntityDescription(
+        key="dewpoint_f",
+        name="Dewpoint (F)",
+        icon="mdi:thermometer-water",
+        native_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        suggested_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda d: _c_to_f(d.get("dewpoint")),
     ),
     MetarSensorEntityDescription(
         key="max_temp_6hr",
         name="Max Temperature (6 hr)",
         icon="mdi:thermometer-chevron-up",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda d: d.get("max_temp_6hr"),
     ),
     MetarSensorEntityDescription(
+        key="max_temp_6hr_f",
+        name="Max Temperature (6 hr) (F)",
+        icon="mdi:thermometer-chevron-up",
+        native_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        suggested_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda d: _c_to_f(d.get("max_temp_6hr")),
+    ),
+    MetarSensorEntityDescription(
         key="min_temp_6hr",
         name="Min Temperature (6 hr)",
         icon="mdi:thermometer-chevron-down",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda d: d.get("min_temp_6hr"),
     ),
     MetarSensorEntityDescription(
+        key="min_temp_6hr_f",
+        name="Min Temperature (6 hr) (F)",
+        icon="mdi:thermometer-chevron-down",
+        native_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        suggested_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda d: _c_to_f(d.get("min_temp_6hr")),
+    ),
+    MetarSensorEntityDescription(
         key="max_temp_24hr",
         name="Max Temperature (24 hr)",
         icon="mdi:thermometer-chevron-up",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda d: d.get("max_temp_24hr"),
     ),
     MetarSensorEntityDescription(
+        key="max_temp_24hr_f",
+        name="Max Temperature (24 hr) (F)",
+        icon="mdi:thermometer-chevron-up",
+        native_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        suggested_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda d: _c_to_f(d.get("max_temp_24hr")),
+    ),
+    MetarSensorEntityDescription(
         key="min_temp_24hr",
         name="Min Temperature (24 hr)",
         icon="mdi:thermometer-chevron-down",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda d: d.get("min_temp_24hr"),
     ),
+    MetarSensorEntityDescription(
+        key="min_temp_24hr_f",
+        name="Min Temperature (24 hr) (F)",
+        icon="mdi:thermometer-chevron-down",
+        native_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        suggested_unit_of_measurement=UnitOfTemperature.FAHRENHEIT,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda d: _c_to_f(d.get("min_temp_24hr")),
+    ),
 
     # --- Pressure ---
+    # Altimeter setting: the AWC JSON API returns hPa, but the METAR A-group
+    # (e.g. A2992) is natively in inHg — that is what pilots dial into their
+    # altimeters. Both units are provided.
     MetarSensorEntityDescription(
         key="altimeter",
         name="Altimeter",
         icon="mdi:gauge",
-        # The AWC JSON API returns this field in hPa (despite the "altim" field name)
         native_unit_of_measurement=UnitOfPressure.HPA,
+        suggested_unit_of_measurement=UnitOfPressure.HPA,
         device_class=SensorDeviceClass.ATMOSPHERIC_PRESSURE,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda d: d.get("altimeter"),
+    ),
+    MetarSensorEntityDescription(
+        key="altimeter_inhg",
+        name="Altimeter (inHg)",
+        icon="mdi:gauge",
+        native_unit_of_measurement=UnitOfPressure.INHG,
+        suggested_unit_of_measurement=UnitOfPressure.INHG,
+        device_class=SensorDeviceClass.ATMOSPHERIC_PRESSURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda d: _hpa_to_inhg(d.get("altimeter")),
     ),
     MetarSensorEntityDescription(
         key="sea_level_pressure",
         name="Sea Level Pressure",
         icon="mdi:gauge-low",
         native_unit_of_measurement=UnitOfPressure.HPA,
+        suggested_unit_of_measurement=UnitOfPressure.HPA,
         device_class=SensorDeviceClass.ATMOSPHERIC_PRESSURE,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda d: d.get("sea_level_pressure"),
@@ -343,8 +457,12 @@ class MetarSensor(MetarEntity, SensorEntity):
         super().__init__(coordinator)
         self.entity_description = description
         self._attr_unique_id = f"{coordinator.station_id}_{description.key}"
-        # Full display name: "EGLL Altimeter", "EGLL Wind Speed", etc.
-        self._attr_name = f"{coordinator.station_id} {description.name}"
+        # Full display name: "EGLL Altimeter" by default, or just the bare name
+        # when station_prefix=False (e.g. "Station Name").
+        if description.station_prefix:
+            self._attr_name = f"{coordinator.station_id} {description.name}"
+        else:
+            self._attr_name = description.name
 
     @property
     def suggested_object_id(self) -> str:
