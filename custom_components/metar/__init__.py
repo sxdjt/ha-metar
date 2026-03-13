@@ -8,17 +8,20 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 
-from .const import CONF_STATION_ID, DEFAULT_SCAN_INTERVAL, DOMAIN, PLATFORMS
+from .const import CONF_STATION_ID, DEFAULT_SCAN_INTERVAL, PLATFORMS
 from .coordinator import MetarCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
+# Typed config entry — gives full type-safety when accessing entry.runtime_data.
+type MetarConfigEntry = ConfigEntry[MetarCoordinator]
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+
+async def async_setup_entry(hass: HomeAssistant, entry: MetarConfigEntry) -> bool:
     """Set up METAR from a config entry."""
     station_id = entry.data[CONF_STATION_ID]
 
-    # Options take precedence over initial data for the poll interval
+    # Options take precedence over initial data for the poll interval.
     scan_interval = entry.options.get(
         CONF_SCAN_INTERVAL,
         entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
@@ -27,24 +30,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator = MetarCoordinator(hass, station_id, scan_interval)
     await coordinator.async_config_entry_first_refresh()
 
-    hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+    entry.runtime_data = coordinator
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    # Reload when options are changed (e.g., the poll interval)
+    # Reload the entry when options change (e.g. poll interval).
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
 
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: MetarConfigEntry) -> bool:
     """Unload a METAR config entry."""
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    if unload_ok:
-        hass.data[DOMAIN].pop(entry.entry_id)
-    return unload_ok
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
 
-async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def _async_update_listener(hass: HomeAssistant, entry: MetarConfigEntry) -> None:
     """Reload the entry when options are updated."""
     await hass.config_entries.async_reload(entry.entry_id)

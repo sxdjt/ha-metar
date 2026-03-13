@@ -12,7 +12,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry  # noqa: TC002
 from homeassistant.const import (
     DEGREE,
     UnitOfLength,
@@ -25,7 +25,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from . import MetarConfigEntry
 from .coordinator import MetarCoordinator
 from .entity import MetarEntity
 
@@ -431,11 +431,11 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: MetarConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up METAR sensors from a config entry."""
-    coordinator: MetarCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: MetarCoordinator = entry.runtime_data
 
     async_add_entities(
         MetarSensor(coordinator, description)

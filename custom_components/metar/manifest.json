@@ -1,7 +1,7 @@
 {
   "domain": "metar",
   "name": "METAR",
-  "codeowners": [],
+  "codeowners": ["@sxdjt"],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/sxdjt/ha-metar",
