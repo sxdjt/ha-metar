@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Home Assistant local dev files
+CLAUDE.md
+claude.md
+
+# Editor
+.vscode/
+.idea/
+*.swp

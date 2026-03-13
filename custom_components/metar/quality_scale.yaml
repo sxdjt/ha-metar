@@ -1,0 +1,16 @@
+rules:
+  # Bronze
+  config-flow: done
+  entity-unique-id: done
+  has-entity-name: done
+  action-setup:
+    status: exempt
+    comment: Integration does not register custom actions.
+
+  # Silver
+  entity-unavailable: done
+  parallel-updates: done
+  reauthentication-flow:
+    status: exempt
+    comment: No authentication required (public Aviation Weather Center API).
+  log-when-unavailable: done

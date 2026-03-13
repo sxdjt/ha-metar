@@ -1,0 +1,12 @@
+{
+  "domain": "metar",
+  "name": "METAR",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/sxdjt/ha-metar",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "requirements": [],
+  "version": "1.0.0"
+}

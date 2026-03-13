@@ -1,0 +1,32 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add METAR Station",
+        "description": "Enter an ICAO station identifier (e.g. KORD, EGLL). Data is fetched from the Aviation Weather Center.",
+        "data": {
+          "station_id": "Station ID (ICAO)",
+          "scan_interval": "Poll interval (minutes)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to reach the Aviation Weather Center API. Check your network connection.",
+      "invalid_station_format": "Station ID must be 3-4 uppercase letters or digits (e.g. KORD).",
+      "station_not_found": "No METAR data found for that station ID. Verify the ICAO identifier and try again."
+    },
+    "abort": {
+      "already_configured": "This station is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "METAR Options",
+        "data": {
+          "scan_interval": "Poll interval (minutes)"
+        }
+      }
+    }
+  }
+}
