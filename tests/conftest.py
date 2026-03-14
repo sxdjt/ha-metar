@@ -18,7 +18,7 @@ SAMPLE_METAR_RESPONSE = [
         "wspd": 12,
         "wgst": 18,
         "visib": "10+",
-        "altim": 29.92,
+        "altim": 1013.2,
         "slp": 1013.2,
         "wxString": "",
         "metarType": "METAR",
@@ -29,7 +29,7 @@ SAMPLE_METAR_RESPONSE = [
         "elev": 205,
         "name": "Chicago O Hare Intl",
         "clouds": [{"cover": "FEW", "base": 5000}],
-        "flightCategory": "VFR",
+        "fltCat": "VFR",
     }
 ]
 
@@ -43,14 +43,14 @@ SAMPLE_METAR_IFR = [
         "wspd": 5,
         "wgst": None,
         "visib": "1/2",
-        "altim": 29.50,
+        "altim": 998.8,
         "wxString": "-RA BR",
         "rawOb": "KORD 132000Z 18005KT 1/2SM -RA BR OVC005 10/09 A2950",
         "name": "Chicago O Hare Intl",
         "clouds": [
             {"cover": "OVC", "base": 500},
         ],
-        "flightCategory": "LIFR",
+        "fltCat": "LIFR",
     }
 ]
 

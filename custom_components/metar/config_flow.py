@@ -38,6 +38,15 @@ def _station_schema(default_station: str = "") -> vol.Schema:
     )
 
 
+def _reconfigure_schema(default_station: str = "") -> vol.Schema:
+    """Schema for the reconfigure step — station ID only."""
+    return vol.Schema(
+        {
+            vol.Required(CONF_STATION_ID, default=default_station): str,
+        }
+    )
+
+
 def _options_schema(current_interval: int) -> vol.Schema:
     return vol.Schema(
         {
@@ -84,6 +93,35 @@ class MetarConfigFlow(ConfigFlow, domain=DOMAIN):
     def async_get_options_flow(config_entry: ConfigEntry) -> MetarOptionsFlow:
         """Return the options flow handler."""
         return MetarOptionsFlow()
+
+    async def async_step_reconfigure(
+        self, user_input: dict | None = None
+    ) -> ConfigFlowResult:
+        """Allow the user to change the station ID after initial setup."""
+        errors: dict[str, str] = {}
+        current_entry = self._get_reconfigure_entry()
+
+        if user_input is not None:
+            station_id = user_input[CONF_STATION_ID].strip().upper()
+            error = await _validate_station(self.hass, station_id)
+            if error:
+                errors["base"] = error
+            else:
+                await self.async_set_unique_id(station_id)
+                self._abort_if_unique_id_configured()
+                return self.async_update_reload_and_abort(
+                    current_entry,
+                    unique_id=station_id,
+                    data_updates={CONF_STATION_ID: station_id},
+                )
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=_reconfigure_schema(
+                default_station=current_entry.data.get(CONF_STATION_ID, "")
+            ),
+            errors=errors,
+        )
 
     async def async_step_user(self, user_input: dict | None = None) -> ConfigFlowResult:
         """Handle the initial setup step."""

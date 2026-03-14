@@ -59,7 +59,6 @@ class MetarSensorEntityDescription(SensorEntityDescription):
     """
 
     value_fn: Callable[[dict], Any]
-    station_prefix: bool = True
 
 
 # ---------------------------------------------------------------------------
@@ -77,7 +76,6 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         name="Station Name",
         icon="mdi:map-marker",
         entity_category=EntityCategory.DIAGNOSTIC,
-        station_prefix=False,
         value_fn=lambda d: d.get("station_name"),
     ),
 
@@ -155,7 +153,8 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfLength.FEET,
         device_class=SensorDeviceClass.DISTANCE,
         state_class=SensorStateClass.MEASUREMENT,
-        # Reported only when sky is obscured (VV group replaces cloud layers)
+        # Only reported when sky is obscured; most users never see a value.
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("vertical_visibility"),
     ),
 
@@ -212,6 +211,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("max_temp_6hr"),
     ),
     MetarSensorEntityDescription(
@@ -223,6 +223,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: _c_to_f(d.get("max_temp_6hr")),
     ),
     MetarSensorEntityDescription(
@@ -234,6 +235,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("min_temp_6hr"),
     ),
     MetarSensorEntityDescription(
@@ -245,6 +247,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: _c_to_f(d.get("min_temp_6hr")),
     ),
     MetarSensorEntityDescription(
@@ -256,6 +259,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("max_temp_24hr"),
     ),
     MetarSensorEntityDescription(
@@ -267,6 +271,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: _c_to_f(d.get("max_temp_24hr")),
     ),
     MetarSensorEntityDescription(
@@ -278,6 +283,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("min_temp_24hr"),
     ),
     MetarSensorEntityDescription(
@@ -289,6 +295,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: _c_to_f(d.get("min_temp_24hr")),
     ),
 
@@ -334,6 +341,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         # Positive = rising, negative = falling over the past 3 hours
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("pressure_tendency"),
     ),
 
@@ -355,6 +363,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.PRECIPITATION,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("precip_3hr"),
     ),
     MetarSensorEntityDescription(
@@ -365,6 +374,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.PRECIPITATION,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("precip_6hr"),
     ),
     MetarSensorEntityDescription(
@@ -375,6 +385,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.PRECIPITATION,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("precip_24hr"),
     ),
     MetarSensorEntityDescription(
@@ -384,6 +395,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfLength.INCHES,
         device_class=SensorDeviceClass.PRECIPITATION,
         state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("snow_depth"),
     ),
 
@@ -457,19 +469,18 @@ class MetarSensor(MetarEntity, SensorEntity):
         super().__init__(coordinator)
         self.entity_description = description
         self._attr_unique_id = f"{coordinator.station_id}_{description.key}"
-        # Full display name: "EGLL Altimeter" by default, or just the bare name
-        # when station_prefix=False (e.g. "Station Name").
-        if description.station_prefix:
-            self._attr_name = f"{coordinator.station_id} {description.name}"
-        else:
-            self._attr_name = description.name
+        # With has_entity_name=True, _attr_name is the entity-only portion.
+        # HA prepends the device name (e.g. "EGLL") when displaying.
+        self._attr_name = description.name
 
     @property
     def suggested_object_id(self) -> str:
-        """Return the suggested entity ID suffix: egll_metar_altimeter, etc."""
-        return (
-            f"{self.coordinator.station_id.lower()}_metar_{self.entity_description.key}"
-        )
+        """Return the entity-portion of the suggested object ID.
+
+        With has_entity_name=True, HA prepends the device name slug automatically,
+        so returning "metar_{key}" produces e.g. "kpsp_metar_temperature_f".
+        """
+        return f"metar_{self.entity_description.key}"
 
     @property
     def native_value(self) -> Any:

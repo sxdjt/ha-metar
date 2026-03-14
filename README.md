@@ -33,6 +33,15 @@ The `flight_category` sensor also carries these extra attributes:
 - `station_name` - full station name
 - `clouds` - list of cloud layer objects `[{cover, base}, ...]`
 
+## Configuration
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| Station ID | Yes | - | ICAO station identifier, 3-4 alphanumeric characters (e.g. `KORD`, `EGLL`, `YSSY`). Must be a station with data in the Aviation Weather Center database. |
+| Poll interval | No | 5 | How often to fetch a new observation, in minutes. Minimum 1, no maximum. METARs are issued roughly hourly; values below 5 minutes provide no additional data. |
+
+The poll interval can be changed after setup via the integration's **Configure** option in Settings -> Devices & Services without removing and re-adding the station.
+
 ## Installation
 
 ### Manual
@@ -68,6 +77,14 @@ User-Agent; the integration uses the aiohttp session managed by Home Assistant.
 | LIFR | < 500 ft | < 1 SM |
 
 The integration uses the category value returned directly by the AWC API.
+
+## Removal
+
+1. Go to **Settings -> Devices & Services**.
+2. Find the **METAR** integration and click the three-dot menu next to the station entry.
+3. Select **Delete**.
+4. Restart Home Assistant (optional but recommended to fully clean up entities).
+5. To completely remove the integration files, delete the `custom_components/metar/` directory from your Home Assistant configuration folder and restart.
 
 ## Contributing
 

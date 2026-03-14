@@ -30,6 +30,8 @@ def _parse_visibility(raw: str | float | int | None) -> float | None:
         return None
     text = str(raw).strip().rstrip("+")
     parts = text.split()
+    if not parts:
+        return None
     try:
         if len(parts) == 2:
             # "1 1/2" style — whole number followed by a fraction

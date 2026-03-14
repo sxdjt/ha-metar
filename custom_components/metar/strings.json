@@ -8,6 +8,13 @@
           "station_id": "Station ID (ICAO)",
           "scan_interval": "Poll interval (minutes)"
         }
+      },
+      "reconfigure": {
+        "title": "Change METAR Station",
+        "description": "Enter a new ICAO station identifier to replace the current one.",
+        "data": {
+          "station_id": "Station ID (ICAO)"
+        }
       }
     },
     "error": {
@@ -16,7 +23,8 @@
       "station_not_found": "No METAR data found for that station ID. Verify the ICAO identifier and try again."
     },
     "abort": {
-      "already_configured": "This station is already configured."
+      "already_configured": "This station is already configured.",
+      "reconfigure_successful": "Station ID updated successfully."
     }
   },
   "options": {

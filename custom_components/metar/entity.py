@@ -18,10 +18,10 @@ class MetarEntity(CoordinatorEntity[MetarCoordinator]):
     """
 
     _attr_attribution = ATTRIBUTION
-    # has_entity_name=False so we control the full display name ourselves
-    # (e.g. "EGLL Altimeter") while setting suggested_object_id separately to
-    # produce the desired entity ID (e.g. sensor.egll_metar_altimeter).
-    _attr_has_entity_name = False
+    # has_entity_name=True: HA prepends the device name ("EGLL") to the entity
+    # name ("Altimeter") automatically, giving display name "EGLL Altimeter".
+    # suggested_object_id on MetarSensor controls the entity ID independently.
+    _attr_has_entity_name = True
 
     def __init__(self, coordinator: MetarCoordinator) -> None:
         """Initialize the base entity."""
