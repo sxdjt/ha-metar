@@ -10,28 +10,133 @@ sensor entities.
 - One config entry per ICAO station; add as many stations as you like
 - Configurable poll interval (default 5 minutes)
 - Options flow to change the poll interval after setup
-- Sensor entities for all key METAR fields
+- Reconfigure flow to change the station without removing and re-adding
+- 35 sensor entities covering all standard METAR fields
 
 ## Sensors
 
-| Entity | Unit | Notes |
+Sensors marked *disabled by default* are rarely reported and must be enabled manually in
+**Settings -> Devices & Services -> [station] -> entities**.
+
+### Identification
+
+| Sensor | Unit | Notes |
+|--------|------|-------|
+| Station Name | - | Full station name; diagnostic |
+
+### Flight Conditions
+
+| Sensor | Unit | Notes |
 |--------|------|-------|
 | Flight Category | - | VFR / MVFR / IFR / LIFR |
-| Wind Speed | knots | |
-| Wind Direction | degrees | `variable: true` attribute when VRB |
-| Wind Gust | knots | `unknown` when no gust reported |
-| Visibility | miles (statute) | Fractions parsed (e.g. 1/4 SM) |
-| Ceiling | feet | Lowest BKN/OVC/VV layer; `unknown` when clear |
-| Temperature | C | HA converts to your preferred unit |
-| Dewpoint | C | |
-| Altimeter | inHg | |
-| Raw METAR | - | Full raw observation string (diagnostic) |
 
-The `flight_category` sensor also carries these extra attributes:
-- `wx_string` - decoded weather phenomena (e.g. `-RA BR`)
-- `report_time` - observation timestamp from the API
-- `station_name` - full station name
-- `clouds` - list of cloud layer objects `[{cover, base}, ...]`
+### Wind
+
+| Sensor | Unit | Notes |
+|--------|------|-------|
+| Wind Speed | knots | |
+| Wind Direction | degrees | `unknown` when variable (VRB); see `variable` attribute |
+| Wind Gust | knots | `unknown` when no gust group reported |
+
+### Visibility and Sky
+
+| Sensor | Unit | Notes |
+|--------|------|-------|
+| Visibility | miles (statute) | Fractions parsed (e.g. 1/4 SM = 0.25) |
+| Cloud Cover | - | Highest coverage layer: SKC / CLR / FEW / SCT / BKN / OVC / VV |
+| Ceiling | feet | Lowest BKN, OVC, or VV layer; `unknown` when sky clear |
+| Vertical Visibility | feet | Only reported when sky is obscured; *disabled by default* |
+
+### Temperature
+
+Both Celsius and Fahrenheit sensors are provided regardless of your HA unit system
+setting, so you can use whichever is appropriate for your automation.
+
+| Sensor | Unit | Notes |
+|--------|------|-------|
+| Temperature | C | Pinned to Celsius |
+| Temperature (F) | F | Pinned to Fahrenheit |
+| Dewpoint | C | Pinned to Celsius |
+| Dewpoint (F) | F | Pinned to Fahrenheit |
+| Max Temperature (6 hr) | C | *Disabled by default*; diagnostic |
+| Max Temperature (6 hr) (F) | F | *Disabled by default*; diagnostic |
+| Min Temperature (6 hr) | C | *Disabled by default*; diagnostic |
+| Min Temperature (6 hr) (F) | F | *Disabled by default*; diagnostic |
+| Max Temperature (24 hr) | C | *Disabled by default*; diagnostic |
+| Max Temperature (24 hr) (F) | F | *Disabled by default*; diagnostic |
+| Min Temperature (24 hr) | C | *Disabled by default*; diagnostic |
+| Min Temperature (24 hr) (F) | F | *Disabled by default*; diagnostic |
+
+### Pressure
+
+The altimeter setting is natively reported in both hPa (from the AWC JSON API) and
+inHg (the value pilots dial into their altimeters). Both sensors are provided.
+
+| Sensor | Unit | Notes |
+|--------|------|-------|
+| Altimeter | hPa | Pinned to hPa |
+| Altimeter (inHg) | inHg | Pinned to inHg |
+| Sea Level Pressure | hPa | |
+| Pressure Tendency | hPa | Change over past 3 hours; *disabled by default*; diagnostic |
+
+### Precipitation and Snow
+
+| Sensor | Unit | Notes |
+|--------|------|-------|
+| Precipitation (1 hr) | inches | |
+| Precipitation (3 hr) | inches | *Disabled by default*; diagnostic |
+| Precipitation (6 hr) | inches | *Disabled by default*; diagnostic |
+| Precipitation (24 hr) | inches | *Disabled by default*; diagnostic |
+| Snow Depth | inches | *Disabled by default* |
+
+### Metadata
+
+| Sensor | Unit | Notes |
+|--------|------|-------|
+| Observation Time | - | Timestamp of the observation; rendered in local timezone |
+| Report Type | - | `METAR` (routine) or `SPECI` (special); diagnostic |
+| Station Elevation | feet | Static; diagnostic |
+| Raw | - | Full raw METAR string; diagnostic |
+
+## Extra State Attributes
+
+Several sensors carry supplemental data as entity attributes.
+
+### Flight Category
+
+| Attribute | Description |
+|-----------|-------------|
+| `wx_string` | Decoded weather phenomena (e.g. `-RA BR`) |
+| `report_time` | Observation timestamp from the API |
+| `station_name` | Full station name |
+| `clouds` | List of cloud layers: `[{"cover": "BKN", "base": 3000}, ...]` |
+
+### Wind Direction
+
+| Attribute | Description |
+|-----------|-------------|
+| `variable` | `true` when wind direction is variable (VRB) |
+
+### Cloud Cover
+
+| Attribute | Description |
+|-----------|-------------|
+| `layers` | List of all cloud layers: `[{"cover": "SCT", "base": 2500}, ...]` |
+
+### Raw
+
+| Attribute | Description |
+|-----------|-------------|
+| `report_time` | Observation timestamp |
+| `receipt_time` | Time the observation was received by the API |
+| `metar_type` | `METAR` or `SPECI` |
+
+### Station Elevation
+
+| Attribute | Description |
+|-----------|-------------|
+| `latitude` | Station latitude (decimal degrees) |
+| `longitude` | Station longitude (decimal degrees) |
 
 ## Configuration
 
@@ -40,7 +145,11 @@ The `flight_category` sensor also carries these extra attributes:
 | Station ID | Yes | - | ICAO station identifier, 3-4 alphanumeric characters (e.g. `KORD`, `EGLL`, `YSSY`). Must be a station with data in the Aviation Weather Center database. |
 | Poll interval | No | 5 | How often to fetch a new observation, in minutes. Minimum 1, no maximum. METARs are issued roughly hourly; values below 5 minutes provide no additional data. |
 
-The poll interval can be changed after setup via the integration's **Configure** option in Settings -> Devices & Services without removing and re-adding the station.
+The poll interval can be changed after setup via the integration's **Configure** option
+in Settings -> Devices & Services without removing and re-adding the station.
+
+The station ID can be changed after setup via the **three-dot menu -> Reconfigure**
+option, which updates the station and reloads the integration.
 
 ## Installation
 
