@@ -6,7 +6,7 @@ import logging
 import re
 
 import voluptuous as vol
-from aiohttp import ClientError
+from aiohttp import ClientError, ContentTypeError
 
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_SCAN_INTERVAL
@@ -18,6 +18,7 @@ from .const import (
     CONF_STATION_ID,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
+    MAX_SCAN_INTERVAL,
     MIN_SCAN_INTERVAL,
 )
 
@@ -32,7 +33,7 @@ def _station_schema(default_station: str = "") -> vol.Schema:
         {
             vol.Required(CONF_STATION_ID, default=default_station): str,
             vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(
-                int, vol.Range(min=MIN_SCAN_INTERVAL)
+                int, vol.Range(min=MIN_SCAN_INTERVAL, max=MAX_SCAN_INTERVAL)
             ),
         }
     )
@@ -51,7 +52,7 @@ def _options_schema(current_interval: int) -> vol.Schema:
     return vol.Schema(
         {
             vol.Optional(CONF_SCAN_INTERVAL, default=current_interval): vol.All(
-                int, vol.Range(min=MIN_SCAN_INTERVAL)
+                int, vol.Range(min=MIN_SCAN_INTERVAL, max=MAX_SCAN_INTERVAL)
             ),
         }
     )
@@ -78,7 +79,10 @@ async def _validate_station(hass, station_id: str) -> str | None:
                 return "station_not_found"
             if response.status != 200:
                 return "cannot_connect"
-            data = await response.json()
+            try:
+                data = await response.json()
+            except (ContentTypeError, ValueError):
+                return "cannot_connect"
             if not data or not isinstance(data, list):
                 return "station_not_found"
     except ClientError:
