@@ -13,10 +13,13 @@ sensor entities.
 - Reconfigure flow to change the station without removing and re-adding
 - 35 sensor entities covering all standard METAR fields
 
+## Integration Quality 
+
+HAMETAR meets the requirements for a [Silver rating](https://developers.home-assistant.io/docs/core/integration-quality-scale/) on the Home Assistant Integration Quality Scale.  While not a native HA integration, quality and assurance matters.  See the current [scorecard](SCORECARD.md) for test results and validation.
+
 ## Sensors
 
-Sensors marked *disabled by default* are rarely reported and must be enabled manually in
-**Settings -> Devices & Services -> [station] -> entities**.
+Sensors marked *disabled by default* are rarely reported and must be enabled manually in **Settings -> Devices & Services -> [station] -> entities**.
 
 ### Identification
 
@@ -49,8 +52,7 @@ Sensors marked *disabled by default* are rarely reported and must be enabled man
 
 ### Temperature
 
-Both Celsius and Fahrenheit sensors are provided regardless of your HA unit system
-setting, so you can use whichever is appropriate for your automation.
+Both Celsius and Fahrenheit sensors are provided regardless of your HA unit system setting, so you can use whichever is appropriate for your automation.
 
 | Sensor | Unit | Notes |
 |--------|------|-------|
@@ -69,8 +71,7 @@ setting, so you can use whichever is appropriate for your automation.
 
 ### Pressure
 
-The altimeter setting is natively reported in both hPa (from the AWC JSON API) and
-inHg (the value pilots dial into their altimeters). Both sensors are provided.
+The altimeter setting is natively reported in both hPa and inHg. Both sensors are provided.
 
 | Sensor | Unit | Notes |
 |--------|------|-------|
@@ -145,11 +146,9 @@ Several sensors carry supplemental data as entity attributes.
 | Station ID | Yes | - | ICAO station identifier, 3-4 alphanumeric characters (e.g. `KORD`, `EGLL`, `YSSY`). Must be a station with data in the Aviation Weather Center database. |
 | Poll interval | No | 5 | How often to fetch a new observation, in minutes. Minimum 1, no maximum. METARs are issued roughly hourly; values below 5 minutes provide no additional data. |
 
-The poll interval can be changed after setup via the integration's **Configure** option
-in Settings -> Devices & Services without removing and re-adding the station.
+The poll interval can be changed after setup via the integration's **Configure** option in Settings -> Devices & Services without removing and re-adding the station.
 
-The station ID can be changed after setup via the **three-dot menu -> Reconfigure**
-option, which updates the station and reloads the integration.
+The station ID can be changed after setup via the **three-dot menu -> Reconfigure** option, which updates the station and reloads the integration.
 
 ## Installation
 
@@ -163,8 +162,7 @@ option, which updates the station and reloads the integration.
 
 ### HACS
 
-Add this repository as a custom HACS repository (type: Integration), then install
-from the HACS integrations page.
+Add this repository as a custom HACS repository (type: Integration), then install from the HACS integrations page.
 
 ## Data Source
 
@@ -173,8 +171,7 @@ Data is fetched from:
 https://aviationweather.gov/api/data/metar?ids={STATION}&format=json
 ```
 
-No API key is required. The AWC asks that automated clients include a descriptive
-User-Agent; the integration uses the aiohttp session managed by Home Assistant.
+No API key is required. The AWC asks that automated clients include a descriptive User-Agent; the integration uses the aiohttp session managed by Home Assistant.
 
 ## Flight Category Reference
 
