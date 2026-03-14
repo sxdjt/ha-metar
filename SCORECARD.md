@@ -154,7 +154,7 @@
 |---|---|
 | action-setup | exempt |
 | appropriate-polling | done |
-| brands | todo |
+| brands | **TO DO**  |
 | common-modules | done |
 | config-flow | done |
 | config-flow-test-coverage | done |
@@ -194,20 +194,20 @@
 | diagnostics | done |
 | discovery | exempt |
 | discovery-update-info | exempt |
-| docs-data-update | todo |
-| docs-examples | todo |
-| docs-known-limitations | todo |
-| docs-supported-devices | todo |
-| docs-supported-functions | todo |
-| docs-troubleshooting | todo |
-| docs-use-cases | todo |
+| docs-data-update | **TO DO** |
+| docs-examples | **TO DO** |
+| docs-known-limitations | **TO DO** |
+| docs-supported-devices | **TO DO** |
+| docs-supported-functions | **TO DO** |
+| docs-troubleshooting | **TO DO** |
+| docs-use-cases | **TO DO** |
 | dynamic-devices | exempt |
 | entity-category | done |
 | entity-device-class | done |
 | entity-disabled-by-default | done |
-| entity-translations | todo |
+| entity-translations | **TO DO** |
 | exception-translations | exempt |
-| icon-translations | todo |
+| icon-translations | **TO DO** |
 | reconfiguration-flow | done |
 | repair-issues | exempt |
 | stale-devices | exempt |
