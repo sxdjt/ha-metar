@@ -1,4 +1,4 @@
-# METAR - Home Assistant Custom Integration
+# HAMETAR - Home Assistant Custom Integration
 
 A Home Assistant custom integration that fetches METAR aviation weather observations
 from the [Aviation Weather Center](https://aviationweather.gov/) and exposes them as
