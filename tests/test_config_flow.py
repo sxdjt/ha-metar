@@ -87,7 +87,7 @@ async def test_validate_station_non_list_response():
 
 @pytest.mark.asyncio
 async def test_validate_station_http_error():
-    """Non-200 HTTP status returns cannot_connect."""
+    """Non-200/204 HTTP status returns cannot_connect."""
     mock_response = AsyncMock()
     mock_response.__aenter__ = AsyncMock(return_value=mock_response)
     mock_response.__aexit__ = AsyncMock(return_value=False)
@@ -102,6 +102,25 @@ async def test_validate_station_http_error():
         return_value=mock_session,
     ):
         assert await _validate_station(hass, "KORD") == "cannot_connect"
+
+
+@pytest.mark.asyncio
+async def test_validate_station_204_no_content():
+    """HTTP 204 (station known but no current data) returns station_not_found."""
+    mock_response = AsyncMock()
+    mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+    mock_response.__aexit__ = AsyncMock(return_value=False)
+    mock_response.status = 204
+
+    mock_session = MagicMock()
+    mock_session.get = MagicMock(return_value=mock_response)
+
+    hass = MagicMock()
+    with patch(
+        "custom_components.metar.config_flow.async_get_clientsession",
+        return_value=mock_session,
+    ):
+        assert await _validate_station(hass, "XXXX") == "station_not_found"
 
 
 @pytest.mark.asyncio

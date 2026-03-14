@@ -72,6 +72,10 @@ async def _validate_station(hass, station_id: str) -> str | None:
             AWC_METAR_URL,
             params={"ids": station_id, "format": "json"},
         ) as response:
+            if response.status == 204:
+                # API returns 204 No Content when the station ID is valid but
+                # has no current METAR data (station closed or infrequently reporting).
+                return "station_not_found"
             if response.status != 200:
                 return "cannot_connect"
             data = await response.json()
