@@ -54,13 +54,15 @@ rules:
   discovery-update-info:
     status: exempt
     comment: No network discovery mechanism; stations identified by fixed ICAO code.
-  docs-data-update: todo
-  docs-examples: todo
-  docs-known-limitations: todo
-  docs-supported-devices: todo
-  docs-supported-functions: todo
-  docs-troubleshooting: todo
-  docs-use-cases: todo
+  docs-data-update: done
+  docs-examples: done
+  docs-known-limitations: done
+  docs-supported-devices:
+    status: exempt
+    comment: Integration exposes a data service (METAR observations), not physical devices; no supported devices list is applicable.
+  docs-supported-functions: done
+  docs-troubleshooting: done
+  docs-use-cases: done
   dynamic-devices:
     status: exempt
     comment: Each config entry is a single station device; no hub-managed child devices appear dynamically.

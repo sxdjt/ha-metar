@@ -164,14 +164,34 @@ The station ID can be changed after setup via the **three-dot menu -> Reconfigur
 
 Add this repository as a custom HACS repository (type: Integration), then install from the HACS integrations page.
 
-## Data Source
+## Data Source and Updates
 
 Data is fetched from:
 ```
 https://aviationweather.gov/api/data/metar?ids={STATION}&format=json
 ```
 
-No API key is required. The AWC asks that automated clients include a descriptive User-Agent; the integration uses the aiohttp session managed by Home Assistant.
+No API key is required. The AWC asks that automated clients include a descriptive User-Agent; the integration uses the aiohttp session managed by Home Assistant.  Data is retrieved every 5 minutes by default, but this can be configured between 1 minute and 10,080 (7 days).
+
+## Example
+
+A simple automation using HAMETAR data
+
+```
+automation:
+    - alias: "EGLL freezing temperature alert"
+      trigger:
+        - platform: numeric_state
+          entity_id: sensor.metar_egll_temperature_f
+          below: 32
+      action:
+        - action: persistent_notification.create
+          data:
+            title: "Freezing Temperature at EGLL"
+            message: >
+              Temperature at EGLL is {{ states('sensor.metar_egll_temperature_f') }} F
+              -- below freezing.
+ ```
 
 ## Flight Category Reference
 
@@ -183,6 +203,27 @@ No API key is required. The AWC asks that automated clients include a descriptiv
 | LIFR | < 500 ft | < 1 SM |
 
 The integration uses the category value returned directly by the AWC API.
+
+## Known Limitations
+
+No known limitations other than requiring a valid ICAO airport station identifier and Internet access.
+
+## Troubleshooting
+
+The integration requires a valid [ICAO airport station identifier](https://opennav.com/airportcodes/icao).
+
+### Station Not Found
+
+Verify that you have entered a valid *ICAO* airport code, not a 3-letter IATA.
+
+### Data Not Updating
+
+The integration pulls whatever METAR is available for the station.  If the station has not issued an updated METAR, there are no changes.
+
+### Entity values are "Unknown"
+
+Some entities are not frequently reported, or are only reported when they are necessary.  An "Unavailable" entity means there was no data provided for it.
+
 
 ## Removal
 

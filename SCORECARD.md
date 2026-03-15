@@ -1,6 +1,6 @@
 # HAMETAR Integration Scorecard
 
-Test run: 2026-03-14 20:42:13 PDT
+Test run: 2026-03-14 21:01:58 PDT
 
 ## Test Suite - 110 / 110 Passed
 
@@ -197,13 +197,13 @@ Test run: 2026-03-14 20:42:13 PDT
 | diagnostics | Done |
 | discovery | Exempt |
 | discovery-update-info | Exempt |
-| docs-data-update | * TO DO * |
-| docs-examples | * TO DO * |
-| docs-known-limitations | * TO DO * |
-| docs-supported-devices | * TO DO * |
-| docs-supported-functions | * TO DO * |
-| docs-troubleshooting | * TO DO * |
-| docs-use-cases | * TO DO * |
+| docs-data-update | Done |
+| docs-examples | Done |
+| docs-known-limitations | Done |
+| docs-supported-devices | Exempt |
+| docs-supported-functions | Done |
+| docs-troubleshooting | Done |
+| docs-use-cases | Done |
 | dynamic-devices | Exempt |
 | entity-category | Done |
 | entity-device-class | Done |
@@ -217,4 +217,4 @@ Test run: 2026-03-14 20:42:13 PDT
 
 ---
 
-**Summary:** 110/110 tests passing. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold has 9 remaining items: 7 documentation rules plus `entity-translations` and `icon-translations`.
+**Summary:** 110/110 tests passing. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold has 2 remaining items: `entity-translations` and `icon-translations`.
