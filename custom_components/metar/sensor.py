@@ -475,12 +475,12 @@ class MetarSensor(MetarEntity, SensorEntity):
 
     @property
     def suggested_object_id(self) -> str:
-        """Return the entity-portion of the suggested object ID.
+        """Return the entity portion of the suggested object ID.
 
-        With has_entity_name=True, HA prepends the device name slug automatically,
-        so returning "metar_{key}" produces e.g. "kpsp_metar_temperature_f".
+        HA prepends the device name slug (e.g. "metar_kpdx") to this value,
+        producing entity IDs like sensor.metar_kpdx_altimeter.
         """
-        return f"metar_{self.entity_description.key}"
+        return self.entity_description.key
 
     @property
     def native_value(self) -> Any:

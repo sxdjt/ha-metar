@@ -28,7 +28,7 @@ class MetarEntity(CoordinatorEntity[MetarCoordinator]):
         super().__init__(coordinator)
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.station_id)},
-            name=coordinator.station_id,
+            name=f"METAR {coordinator.station_id}",
             manufacturer="Aviation Weather Center",
             model="METAR",
             entry_type=DeviceEntryType.SERVICE,

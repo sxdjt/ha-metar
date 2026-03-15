@@ -99,20 +99,20 @@ def test_sensor_station_name_field_label_only():
 
 
 def test_sensor_suggested_object_id():
+    # HA prepends the device name slug ("metar_kord") to this, giving
+    # entity IDs like sensor.metar_kord_temperature.
     sensor = make_sensor("temperature")
-    assert sensor.suggested_object_id == "metar_temperature"
+    assert sensor.suggested_object_id == "temperature"
 
 
 def test_sensor_suggested_object_id_different_station():
-    # Station ID is not part of the entity portion; HA prepends the device slug.
     sensor = make_sensor("altimeter", station_id="EGLL")
-    assert sensor.suggested_object_id == "metar_altimeter"
+    assert sensor.suggested_object_id == "altimeter"
 
 
 def test_sensor_suggested_object_id_no_station_prefix():
-    # With has_entity_name=True, HA prepends the device name slug automatically.
     sensor = make_sensor("wind_speed", station_id="PANC")
-    assert sensor.suggested_object_id == "metar_wind_speed"
+    assert sensor.suggested_object_id == "wind_speed"
 
 
 # ---------------------------------------------------------------------------
