@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- New "Observation Time (Local)" sensor (`sensor.metar_{station}_obs_time_local`)
+  showing the observation time converted to the system's local timezone.
+- New "Time Since Observation" sensor (`sensor.metar_{station}_time_since_obs`)
+  showing how many minutes have elapsed since the last reported observation.
+
+### Changed
+
+- "Observation Time" sensor now displays the actual UTC timestamp string
+  (e.g. `2026-03-14 23:35Z`) instead of a relative "x minutes ago" value.
+
+### Fixed
+
+- Altimeter readings now correctly normalized to hPa for all stations. US stations
+  report the A-group (inHg, e.g. A2992); international stations report the Q-group
+  (hPa, e.g. Q1013). The integration parses the prefix from the raw METAR string
+  and converts A-group values to hPa so that both the Altimeter (hPa) and
+  Altimeter (inHg) sensors are accurate regardless of station origin.
+
 ## [1.0.1] - 2026-03-14
 
 ### Fixed

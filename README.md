@@ -11,7 +11,7 @@ sensor entities.
 - Configurable poll interval (default 5 minutes)
 - Options flow to change the poll interval after setup
 - Reconfigure flow to change the station without removing and re-adding
-- 35 sensor entities covering all standard METAR fields
+- 37 sensor entities covering all standard METAR fields
 
 ## Integration Quality 
 
@@ -23,80 +23,82 @@ Sensors marked *disabled by default* are rarely reported and must be enabled man
 
 ### Identification
 
-| Sensor | Unit | Notes |
-|--------|------|-------|
-| Station Name | - | Full station name; diagnostic |
+| Sensor | Unit | Type | Notes |
+|--------|------|------|-------|
+| Station Name | - | Raw | Full station name; diagnostic |
 
 ### Flight Conditions
 
-| Sensor | Unit | Notes |
-|--------|------|-------|
-| Flight Category | - | VFR / MVFR / IFR / LIFR |
+| Sensor | Unit | Type | Notes |
+|--------|------|------|-------|
+| Flight Category | - | Raw | VFR / MVFR / IFR / LIFR |
 
 ### Wind
 
-| Sensor | Unit | Notes |
-|--------|------|-------|
-| Wind Speed | knots | |
-| Wind Direction | degrees | `unknown` when variable (VRB); see `variable` attribute |
-| Wind Gust | knots | `unknown` when no gust group reported |
+| Sensor | Unit | Type | Notes |
+|--------|------|------|-------|
+| Wind Speed | knots | Raw | |
+| Wind Direction | degrees | Raw | `unknown` when variable (VRB); see `variable` attribute |
+| Wind Gust | knots | Raw | `unknown` when no gust group reported |
 
 ### Visibility and Sky
 
-| Sensor | Unit | Notes |
-|--------|------|-------|
-| Visibility | miles (statute) | Fractions parsed (e.g. 1/4 SM = 0.25) |
-| Cloud Cover | - | Highest coverage layer: SKC / CLR / FEW / SCT / BKN / OVC / VV |
-| Ceiling | feet | Lowest BKN, OVC, or VV layer; `unknown` when sky clear |
-| Vertical Visibility | feet | Only reported when sky is obscured; *disabled by default* |
+| Sensor | Unit | Type | Notes |
+|--------|------|------|-------|
+| Visibility | miles (statute) | Calculated | String fractions parsed to decimal (e.g. 1/4 SM = 0.25) |
+| Cloud Cover | - | Raw | Highest coverage layer: SKC / CLR / FEW / SCT / BKN / OVC / VV |
+| Ceiling | feet | Calculated | Lowest BKN, OVC, or VV layer extracted from cloud layer list; `unknown` when sky clear |
+| Vertical Visibility | feet | Raw | Only reported when sky is obscured; *disabled by default* |
 
 ### Temperature
 
 Both Celsius and Fahrenheit sensors are provided regardless of your HA unit system setting, so you can use whichever is appropriate for your automation.
 
-| Sensor | Unit | Notes |
-|--------|------|-------|
-| Temperature | C | Pinned to Celsius |
-| Temperature (F) | F | Pinned to Fahrenheit |
-| Dewpoint | C | Pinned to Celsius |
-| Dewpoint (F) | F | Pinned to Fahrenheit |
-| Max Temperature (6 hr) | C | *Disabled by default*; diagnostic |
-| Max Temperature (6 hr) (F) | F | *Disabled by default*; diagnostic |
-| Min Temperature (6 hr) | C | *Disabled by default*; diagnostic |
-| Min Temperature (6 hr) (F) | F | *Disabled by default*; diagnostic |
-| Max Temperature (24 hr) | C | *Disabled by default*; diagnostic |
-| Max Temperature (24 hr) (F) | F | *Disabled by default*; diagnostic |
-| Min Temperature (24 hr) | C | *Disabled by default*; diagnostic |
-| Min Temperature (24 hr) (F) | F | *Disabled by default*; diagnostic |
+| Sensor | Unit | Type | Notes |
+|--------|------|------|-------|
+| Temperature | C | Raw | Pinned to Celsius |
+| Temperature (F) | F | Calculated | Converted from Celsius |
+| Dewpoint | C | Raw | Pinned to Celsius |
+| Dewpoint (F) | F | Calculated | Converted from Celsius |
+| Max Temperature (6 hr) | C | Raw | *Disabled by default*; diagnostic |
+| Max Temperature (6 hr) (F) | F | Calculated | Converted from Celsius; *disabled by default*; diagnostic |
+| Min Temperature (6 hr) | C | Raw | *Disabled by default*; diagnostic |
+| Min Temperature (6 hr) (F) | F | Calculated | Converted from Celsius; *disabled by default*; diagnostic |
+| Max Temperature (24 hr) | C | Raw | *Disabled by default*; diagnostic |
+| Max Temperature (24 hr) (F) | F | Calculated | Converted from Celsius; *disabled by default*; diagnostic |
+| Min Temperature (24 hr) | C | Raw | *Disabled by default*; diagnostic |
+| Min Temperature (24 hr) (F) | F | Calculated | Converted from Celsius; *disabled by default*; diagnostic |
 
 ### Pressure
 
-The altimeter setting is natively reported in both hPa and inHg. Both sensors are provided.
+The altimeter setting is always presented in both hPa and inHg. US stations report in inHg (A-group, e.g. A2992); international stations report in hPa (Q-group, e.g. Q1013). The integration normalizes to hPa internally and derives the inHg value, so both sensors are always available regardless of station origin.
 
-| Sensor | Unit | Notes |
-|--------|------|-------|
-| Altimeter | hPa | Pinned to hPa |
-| Altimeter (inHg) | inHg | Pinned to inHg |
-| Sea Level Pressure | hPa | |
-| Pressure Tendency | hPa | Change over past 3 hours; *disabled by default*; diagnostic |
+| Sensor | Unit | Type | Notes |
+|--------|------|------|-------|
+| Altimeter | hPa | Calculated | Parsed from raw METAR string; A-group converted from inHg |
+| Altimeter (inHg) | inHg | Calculated | Converted from hPa |
+| Sea Level Pressure | hPa | Raw | |
+| Pressure Tendency | hPa | Raw | Change over past 3 hours; *disabled by default*; diagnostic |
 
 ### Precipitation and Snow
 
-| Sensor | Unit | Notes |
-|--------|------|-------|
-| Precipitation (1 hr) | inches | |
-| Precipitation (3 hr) | inches | *Disabled by default*; diagnostic |
-| Precipitation (6 hr) | inches | *Disabled by default*; diagnostic |
-| Precipitation (24 hr) | inches | *Disabled by default*; diagnostic |
-| Snow Depth | inches | *Disabled by default* |
+| Sensor | Unit | Type | Notes |
+|--------|------|------|-------|
+| Precipitation (1 hr) | inches | Raw | |
+| Precipitation (3 hr) | inches | Raw | *Disabled by default*; diagnostic |
+| Precipitation (6 hr) | inches | Raw | *Disabled by default*; diagnostic |
+| Precipitation (24 hr) | inches | Raw | *Disabled by default*; diagnostic |
+| Snow Depth | inches | Raw | *Disabled by default* |
 
 ### Metadata
 
-| Sensor | Unit | Notes |
-|--------|------|-------|
-| Observation Time | - | Timestamp of the observation; rendered in local timezone |
-| Report Type | - | `METAR` (routine) or `SPECI` (special); diagnostic |
-| Station Elevation | feet | Static; diagnostic |
+| Sensor | Unit | Type | Notes |
+|--------|------|------|-------|
+| Observation Time | - | Calculated | Unix epoch from API formatted as UTC timestamp string |
+| Observation Time (Local) | - | Calculated | UTC observation time converted to system local timezone |
+| Time Since Observation | minutes | Calculated | Elapsed minutes since the observation timestamp |
+| Report Type | - | Raw | `METAR` (routine) or `SPECI` (special); diagnostic |
+| Station Elevation | feet | Raw | Static; diagnostic |
 | Raw | - | Full raw METAR string; diagnostic |
 
 ## Extra State Attributes
@@ -105,39 +107,39 @@ Several sensors carry supplemental data as entity attributes.
 
 ### Flight Category
 
-| Attribute | Description |
-|-----------|-------------|
-| `wx_string` | Decoded weather phenomena (e.g. `-RA BR`) |
-| `report_time` | Observation timestamp from the API |
-| `station_name` | Full station name |
-| `clouds` | List of cloud layers: `[{"cover": "BKN", "base": 3000}, ...]` |
+| Attribute | Description | Type |
+|-----------|-------------|------|
+| `wx_string` | Decoded weather phenomena (e.g. `-RA BR`) | Raw |
+| `report_time` | Observation timestamp from the API | Raw |
+| `station_name` | Full station name | Raw |
+| `clouds` | List of cloud layers: `[{"cover": "BKN", "base": 3000}, ...]` | Raw |
 
 ### Wind Direction
 
-| Attribute | Description |
-|-----------|-------------|
-| `variable` | `true` when wind direction is variable (VRB) |
+| Attribute | Description | Type |
+|-----------|-------------|------|
+| `variable` | `true` when wind direction is variable (VRB) | Calculated |
 
 ### Cloud Cover
 
-| Attribute | Description |
-|-----------|-------------|
-| `layers` | List of all cloud layers: `[{"cover": "SCT", "base": 2500}, ...]` |
+| Attribute | Description | Type |
+|-----------|-------------|------|
+| `layers` | List of all cloud layers: `[{"cover": "SCT", "base": 2500}, ...]` | Raw |
 
 ### Raw
 
-| Attribute | Description |
-|-----------|-------------|
-| `report_time` | Observation timestamp |
-| `receipt_time` | Time the observation was received by the API |
-| `metar_type` | `METAR` or `SPECI` |
+| Attribute | Description | Type |
+|-----------|-------------|------|
+| `report_time` | Observation timestamp | Raw |
+| `receipt_time` | Time the observation was received by the API | Raw |
+| `metar_type` | `METAR` or `SPECI` | Raw |
 
 ### Station Elevation
 
-| Attribute | Description |
-|-----------|-------------|
-| `latitude` | Station latitude (decimal degrees) |
-| `longitude` | Station longitude (decimal degrees) |
+| Attribute | Description | Type |
+|-----------|-------------|------|
+| `latitude` | Station latitude (decimal degrees) | Raw |
+| `longitude` | Station longitude (decimal degrees) | Raw |
 
 ## Configuration
 

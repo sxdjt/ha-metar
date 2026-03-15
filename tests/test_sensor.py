@@ -186,6 +186,53 @@ def test_native_value_min_temp_24hr_f():
     assert sensor.native_value == pytest.approx(32.0)
 
 
+def test_native_value_obs_time():
+    """Observation time is returned as a formatted UTC string."""
+    from datetime import datetime, timezone
+    dt = datetime(2026, 3, 14, 23, 35, 0, tzinfo=timezone.utc)
+    sensor = make_sensor("obs_time", data={"obs_time": dt})
+    assert sensor.native_value == "2026-03-14 23:35Z"
+
+
+def test_native_value_obs_time_local():
+    """Observation time local is the UTC time converted to local timezone."""
+    from datetime import datetime, timezone
+    dt = datetime(2026, 3, 14, 23, 35, 0, tzinfo=timezone.utc)
+    sensor = make_sensor("obs_time_local", data={"obs_time": dt})
+    expected = dt.astimezone().strftime("%Y-%m-%d %H:%M %Z")
+    assert sensor.native_value == expected
+
+
+def test_native_value_obs_time_local_none():
+    """Returns None when obs_time is absent."""
+    sensor = make_sensor("obs_time_local", data={"obs_time": None})
+    assert sensor.native_value is None
+
+
+def test_native_value_obs_time_none():
+    """Returns None when obs_time is absent."""
+    sensor = make_sensor("obs_time", data={"obs_time": None})
+    assert sensor.native_value is None
+
+
+def test_native_value_time_since_obs():
+    """Time since observation returns elapsed minutes."""
+    from datetime import datetime, timezone, timedelta
+    from unittest.mock import patch
+    now = datetime(2026, 3, 14, 23, 35, 0, tzinfo=timezone.utc)
+    obs = now - timedelta(minutes=47)
+    sensor = make_sensor("time_since_obs", data={"obs_time": obs})
+    with patch("custom_components.metar.sensor.datetime") as mock_dt:
+        mock_dt.now.return_value = now
+        assert sensor.native_value == 47
+
+
+def test_native_value_time_since_obs_none():
+    """Returns None when obs_time is absent."""
+    sensor = make_sensor("time_since_obs", data={"obs_time": None})
+    assert sensor.native_value is None
+
+
 # ---------------------------------------------------------------------------
 # extra_state_attributes
 # ---------------------------------------------------------------------------
@@ -303,7 +350,7 @@ _ENABLED_BY_DEFAULT = {
     "wind_gust", "visibility", "cloud_cover", "ceiling",
     "temperature", "temperature_f", "dewpoint", "dewpoint_f",
     "altimeter", "altimeter_inhg", "sea_level_pressure",
-    "precip_1hr", "obs_time", "metar_type", "elevation", "raw_metar",
+    "precip_1hr", "obs_time", "obs_time_local", "time_since_obs", "metar_type", "elevation", "raw_metar",
 }
 
 

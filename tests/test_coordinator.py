@@ -12,6 +12,7 @@ from custom_components.metar.coordinator import (
     MetarCoordinator,
     _extract_ceiling,
     _obs_time_to_dt,
+    _parse_altimeter_hpa,
     _parse_visibility,
 )
 from homeassistant.helpers.update_coordinator import UpdateFailed
@@ -44,6 +45,51 @@ def test_parse_visibility(raw, expected):
         assert result is None
     else:
         assert result == pytest.approx(expected)
+
+
+# ---------------------------------------------------------------------------
+# _parse_altimeter_hpa unit tests
+# ---------------------------------------------------------------------------
+
+
+def test_parse_altimeter_hpa_a_group():
+    """A-group (inHg) is converted to hPa. A3042 = 30.42 inHg = 1030.3 hPa."""
+    raw = "METAR KSEA 150553Z VRB06KT 10SM SCT048 05/00 A3042 RMK AO2"
+    result = _parse_altimeter_hpa(raw, None)
+    assert result == pytest.approx(1030.1, abs=0.1)
+
+
+def test_parse_altimeter_hpa_q_group():
+    """Q-group (hPa) is returned as-is."""
+    raw = "METAR EDDB 150550Z AUTO 31008KT 9999 SCT008 05/04 Q1011 TEMPO BKN007"
+    result = _parse_altimeter_hpa(raw, None)
+    assert result == 1011.0
+
+
+def test_parse_altimeter_hpa_falls_back_to_api_value():
+    """When raw METAR has no altimeter group, fall back to the API value."""
+    result = _parse_altimeter_hpa(None, 1013.2)
+    assert result == 1013.2
+
+
+def test_parse_altimeter_hpa_no_raw_no_api():
+    """Returns None when both raw METAR and API value are absent."""
+    result = _parse_altimeter_hpa(None, None)
+    assert result is None
+
+
+def test_parse_altimeter_hpa_kord_real():
+    """KORD real observation: A2987 = 29.87 inHg -> ~1011.8 hPa."""
+    raw = "METAR KORD 150551Z 07010KT 10SM OVC075 02/M03 A2987 RMK AO2 SLP122 T00221033 10022 20006 400281022 56040 $"
+    result = _parse_altimeter_hpa(raw, 1011.6)
+    assert result == pytest.approx(1011.5, abs=0.1)
+
+
+def test_parse_altimeter_hpa_yssy_real():
+    """YSSY real observation: Q1019 -> 1019.0 hPa."""
+    raw = "METAR YSSY 150600Z AUTO 03018KT 9999 // NCD 26/16 Q1019"
+    result = _parse_altimeter_hpa(raw, 1019)
+    assert result == 1019.0
 
 
 # ---------------------------------------------------------------------------
@@ -156,6 +202,37 @@ def test_normalize_lifr(sample_metar_ifr):
     assert result["ceiling"] == 500
     assert result["wx_string"] == "-RA BR"
     assert result["wind_gust"] is None
+
+
+def test_normalize_altimeter_q_group():
+    """Q-group (international) altimeter is returned in hPa unchanged."""
+    coord = _make_coordinator()
+    raw = {
+        "icaoId": "YSSY",
+        "wdir": 30,
+        "wspd": 18,
+        "clouds": [],
+        "altim": 1019,
+        "rawOb": "METAR YSSY 150600Z AUTO 03018KT 9999 // NCD 26/16 Q1019",
+    }
+    result = coord._normalize(raw)
+    assert result["altimeter"] == 1019.0
+
+
+def test_normalize_altimeter_a_group():
+    """A-group (US) altimeter is converted from inHg to hPa."""
+    coord = _make_coordinator()
+    raw = {
+        "icaoId": "KORD",
+        "wdir": 70,
+        "wspd": 10,
+        "clouds": [],
+        "altim": 1011.6,
+        "rawOb": "METAR KORD 150551Z 07010KT 10SM OVC075 02/M03 A2987 RMK AO2 SLP122 $",
+    }
+    result = coord._normalize(raw)
+    # A2987 = 29.87 inHg * 33.8639 = 1011.5 hPa
+    assert result["altimeter"] == pytest.approx(1011.5, abs=0.1)
 
 
 def test_normalize_variable_wind():

@@ -32,6 +32,8 @@
       "precip_24hr":         { "default": "mdi:weather-rainy" },
       "snow_depth":          { "default": "mdi:snowflake" },
       "obs_time":            { "default": "mdi:clock-outline" },
+      "obs_time_local":      { "default": "mdi:clock-outline" },
+      "time_since_obs":      { "default": "mdi:clock-fast" },
       "metar_type":          { "default": "mdi:file-document-outline" },
       "elevation":           { "default": "mdi:elevation-rise" },
       "raw_metar":           { "default": "mdi:text" }

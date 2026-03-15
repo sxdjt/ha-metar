@@ -7,6 +7,8 @@ import logging
 from datetime import datetime, timezone
 from datetime import timedelta
 
+import re
+
 import aiohttp
 from aiohttp import ClientError, ClientResponseError
 
@@ -17,6 +19,31 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .const import ATTRIBUTION, AWC_METAR_URL, CEILING_LAYERS, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
+
+
+_ALTIMETER_RE = re.compile(r'\b([AQ])(\d{4})\b')
+
+def _parse_altimeter_hpa(raw_metar: str | None, api_value: float | None) -> float | None:
+    """Return the altimeter setting in hPa.
+
+    The AWC API returns altim in inHg for A-group stations and hPa for Q-group
+    stations. Parse the prefix from the raw METAR string to determine the unit
+    and convert to hPa if needed. Falls back to the API value if unparseable.
+
+    A3042 -> 30.42 inHg -> 1029.6 hPa
+    Q1011 -> 1011 hPa
+    """
+    if raw_metar:
+        match = _ALTIMETER_RE.search(raw_metar)
+        if match:
+            prefix, digits = match.group(1), match.group(2)
+            if prefix == "A":
+                inhg = int(digits) / 100.0
+                return round(inhg * 33.8639, 1)
+            # Q-group: value is already hPa
+            return float(digits)
+    # Fall back to API value (assumed hPa when prefix cannot be determined)
+    return api_value
 
 
 def _parse_visibility(raw: str | float | int | None) -> float | None:
@@ -178,7 +205,7 @@ class MetarCoordinator(DataUpdateCoordinator[dict]):
             "dewpoint": raw.get("dewp"),                 # Celsius float or None
 
             # --- Pressure ---
-            "altimeter": raw.get("altim"),               # hPa float (API field, despite name)
+            "altimeter": _parse_altimeter_hpa(raw.get("rawOb"), raw.get("altim")),  # hPa
             "sea_level_pressure": raw.get("slp"),        # hPa float or None
 
             # --- Precipitation (6-hourly groups, None when not reported) ---

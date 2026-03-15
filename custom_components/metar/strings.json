@@ -60,6 +60,8 @@
       "precip_24hr":         { "name": "Precipitation (24 hr)" },
       "snow_depth":          { "name": "Snow Depth" },
       "obs_time":            { "name": "Observation Time" },
+      "obs_time_local":      { "name": "Observation Time (Local)" },
+      "time_since_obs":      { "name": "Time Since Observation" },
       "metar_type":          { "name": "Report Type" },
       "elevation":           { "name": "Station Elevation" },
       "raw_metar":           { "name": "Raw" }

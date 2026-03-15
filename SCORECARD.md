@@ -1,17 +1,17 @@
 # HAMETAR Integration Scorecard
 
-Test run: 2026-03-14 21:10:12 PDT
+Test run: 2026-03-14 23:50:00 PDT
 
-## Test Suite - 110 / 110 Passed
+## Test Suite - 126 / 126 Passed
 
 | Module | Tests | Status |
 |---|---|---|
 | `test_config_flow.py` | 22 | Pass |
-| `test_coordinator.py` | 31 | Pass |
+| `test_coordinator.py` | 37 | Pass |
 | `test_diagnostics.py` | 3 | Pass |
-| `test_init.py` | 11 | Pass |
-| `test_sensor.py` | 43 | Pass |
-| **Total** | **110** | **All passing** |
+| `test_init.py` | 13 | Pass |
+| `test_sensor.py` | 49 | Pass |
+| **Total** | **126** | **All passing** |
 
 ---
 
@@ -44,7 +44,7 @@ Test run: 2026-03-14 21:10:12 PDT
 
 ---
 
-### test_coordinator.py (31 tests)
+### test_coordinator.py (37 tests)
 
 | Test | Status |
 |---|---|
@@ -58,6 +58,12 @@ Test run: 2026-03-14 21:10:12 PDT
 | `test_parse_visibility[P6SM-None]` | Pass |
 | `test_parse_visibility[None-None]` | Pass |
 | `test_parse_visibility[-None]` | Pass |
+| `test_parse_altimeter_hpa_a_group` | Pass |
+| `test_parse_altimeter_hpa_q_group` | Pass |
+| `test_parse_altimeter_hpa_falls_back_to_api_value` | Pass |
+| `test_parse_altimeter_hpa_no_raw_no_api` | Pass |
+| `test_parse_altimeter_hpa_kord_real` | Pass |
+| `test_parse_altimeter_hpa_yssy_real` | Pass |
 | `test_extract_ceiling` (8 cases) | Pass |
 | `test_obs_time_to_dt_valid` | Pass |
 | `test_obs_time_to_dt_none` | Pass |
@@ -66,6 +72,8 @@ Test run: 2026-03-14 21:10:12 PDT
 | `test_normalize_standard` | Pass |
 | `test_normalize_lifr` | Pass |
 | `test_normalize_variable_wind` | Pass |
+| `test_normalize_altimeter_q_group` | Pass |
+| `test_normalize_altimeter_a_group` | Pass |
 | `test_update_raises_on_timeout` | Pass |
 | `test_update_raises_on_http_error_status` | Pass |
 | `test_update_raises_on_client_error` | Pass |
@@ -84,7 +92,7 @@ Test run: 2026-03-14 21:10:12 PDT
 
 ---
 
-### test_init.py (11 tests)
+### test_init.py (13 tests)
 
 | Test | Status |
 |---|---|
@@ -98,11 +106,13 @@ Test run: 2026-03-14 21:10:12 PDT
 | `test_unload_entry_returns_true_on_success` | Pass |
 | `test_unload_entry_calls_unload_platforms` | Pass |
 | `test_unload_entry_returns_false_when_platform_unload_fails` | Pass |
+| `test_migrate_entity_ids_renames_old_format` | Pass |
+| `test_migrate_entity_ids_skips_already_migrated` | Pass |
 | `test_update_listener_reloads_entry` | Pass |
 
 ---
 
-### test_sensor.py (43 tests)
+### test_sensor.py (49 tests)
 
 | Test | Status |
 |---|---|
@@ -130,6 +140,12 @@ Test run: 2026-03-14 21:10:12 PDT
 | `test_native_value_min_temp_6hr_f` | Pass |
 | `test_native_value_max_temp_24hr_f` | Pass |
 | `test_native_value_min_temp_24hr_f` | Pass |
+| `test_native_value_obs_time` | Pass |
+| `test_native_value_obs_time_none` | Pass |
+| `test_native_value_obs_time_local` | Pass |
+| `test_native_value_obs_time_local_none` | Pass |
+| `test_native_value_time_since_obs` | Pass |
+| `test_native_value_time_since_obs_none` | Pass |
 | `test_extra_attrs_when_data_none` | Pass |
 | `test_extra_attrs_flight_category` | Pass |
 | `test_extra_attrs_wind_direction_not_variable` | Pass |
@@ -217,4 +233,4 @@ Test run: 2026-03-14 21:10:12 PDT
 
 ---
 
-**Summary:** 110/110 tests passing. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold complete except `brands` (requires a separate PR to home-assistant/brands).
+**Summary:** 126/126 tests passing. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold complete except `brands` (requires a separate PR to home-assistant/brands).

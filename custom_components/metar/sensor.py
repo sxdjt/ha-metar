@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from typing import Any
 
 from homeassistant.components.sensor import (
@@ -19,6 +20,7 @@ from homeassistant.const import (
     UnitOfPressure,
     UnitOfSpeed,
     UnitOfTemperature,
+    UnitOfTime,
     UnitOfVolumetricFlux,
 )
 from homeassistant.core import HomeAssistant
@@ -404,9 +406,33 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         key="obs_time",
         name="Observation Time",
         icon="mdi:clock-outline",
-        device_class=SensorDeviceClass.TIMESTAMP,
-        # Returns an aware datetime; HA renders it in the user's local timezone.
-        value_fn=lambda d: d.get("obs_time"),
+        # Formatted as a plain string so HA displays the actual time, not "x minutes ago".
+        value_fn=lambda d: (
+            d["obs_time"].strftime("%Y-%m-%d %H:%MZ")
+            if d.get("obs_time") is not None else None
+        ),
+    ),
+    MetarSensorEntityDescription(
+        key="obs_time_local",
+        name="Observation Time (Local)",
+        icon="mdi:clock-outline",
+        # Observation time converted to the system's local timezone.
+        value_fn=lambda d: (
+            d["obs_time"].astimezone().strftime("%Y-%m-%d %H:%M %Z")
+            if d.get("obs_time") is not None else None
+        ),
+    ),
+    MetarSensorEntityDescription(
+        key="time_since_obs",
+        name="Time Since Observation",
+        icon="mdi:clock-fast",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        state_class=SensorStateClass.MEASUREMENT,
+        # Minutes elapsed since the reported observation time.
+        value_fn=lambda d: (
+            round((datetime.now(timezone.utc) - d["obs_time"]).total_seconds() / 60)
+            if d.get("obs_time") is not None else None
+        ),
     ),
 
     # --- Report type ---
