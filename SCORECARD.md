@@ -1,6 +1,6 @@
 # HAMETAR Integration Scorecard
 
-Test run: 2026-03-14 21:01:58 PDT
+Test run: 2026-03-14 21:10:12 PDT
 
 ## Test Suite - 110 / 110 Passed
 
@@ -208,13 +208,13 @@ Test run: 2026-03-14 21:01:58 PDT
 | entity-category | Done |
 | entity-device-class | Done |
 | entity-disabled-by-default | Done |
-| entity-translations | * TO DO * |
+| entity-translations | Done |
 | exception-translations | Exempt |
-| icon-translations | * TO DO * |
+| icon-translations | Done |
 | reconfiguration-flow | Done |
 | repair-issues | Exempt |
 | stale-devices | Exempt |
 
 ---
 
-**Summary:** 110/110 tests passing. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold has 2 remaining items: `entity-translations` and `icon-translations`.
+**Summary:** 110/110 tests passing. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold complete except `brands` (requires a separate PR to home-assistant/brands).

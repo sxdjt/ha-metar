@@ -1,0 +1,40 @@
+{
+  "entity": {
+    "sensor": {
+      "station_name":        { "default": "mdi:map-marker" },
+      "flight_category":     { "default": "mdi:airplane" },
+      "wind_speed":          { "default": "mdi:weather-windy" },
+      "wind_direction":      { "default": "mdi:compass-rose" },
+      "wind_gust":           { "default": "mdi:weather-windy-variant" },
+      "visibility":          { "default": "mdi:eye" },
+      "cloud_cover":         { "default": "mdi:weather-cloudy" },
+      "ceiling":             { "default": "mdi:weather-cloudy-arrow-right" },
+      "vertical_visibility": { "default": "mdi:arrow-up-thin" },
+      "temperature":         { "default": "mdi:thermometer" },
+      "temperature_f":       { "default": "mdi:thermometer" },
+      "dewpoint":            { "default": "mdi:thermometer-water" },
+      "dewpoint_f":          { "default": "mdi:thermometer-water" },
+      "max_temp_6hr":        { "default": "mdi:thermometer-chevron-up" },
+      "max_temp_6hr_f":      { "default": "mdi:thermometer-chevron-up" },
+      "min_temp_6hr":        { "default": "mdi:thermometer-chevron-down" },
+      "min_temp_6hr_f":      { "default": "mdi:thermometer-chevron-down" },
+      "max_temp_24hr":       { "default": "mdi:thermometer-chevron-up" },
+      "max_temp_24hr_f":     { "default": "mdi:thermometer-chevron-up" },
+      "min_temp_24hr":       { "default": "mdi:thermometer-chevron-down" },
+      "min_temp_24hr_f":     { "default": "mdi:thermometer-chevron-down" },
+      "altimeter":           { "default": "mdi:gauge" },
+      "altimeter_inhg":      { "default": "mdi:gauge" },
+      "sea_level_pressure":  { "default": "mdi:gauge-low" },
+      "pressure_tendency":   { "default": "mdi:gauge" },
+      "precip_1hr":          { "default": "mdi:weather-rainy" },
+      "precip_3hr":          { "default": "mdi:weather-rainy" },
+      "precip_6hr":          { "default": "mdi:weather-rainy" },
+      "precip_24hr":         { "default": "mdi:weather-rainy" },
+      "snow_depth":          { "default": "mdi:snowflake" },
+      "obs_time":            { "default": "mdi:clock-outline" },
+      "metar_type":          { "default": "mdi:file-document-outline" },
+      "elevation":           { "default": "mdi:elevation-rise" },
+      "raw_metar":           { "default": "mdi:text" }
+    }
+  }
+}

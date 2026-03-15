@@ -469,8 +469,9 @@ class MetarSensor(MetarEntity, SensorEntity):
         super().__init__(coordinator)
         self.entity_description = description
         self._attr_unique_id = f"{coordinator.station_id}_{description.key}"
-        # With has_entity_name=True, _attr_name is the entity-only portion.
-        # HA prepends the device name (e.g. "EGLL") when displaying.
+        # translation_key links this entity to strings.json and icons.json.
+        # _attr_name is kept as a fallback for environments without translations.
+        self._attr_translation_key = description.key
         self._attr_name = description.name
 
     @property

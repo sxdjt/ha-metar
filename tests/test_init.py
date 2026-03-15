@@ -9,6 +9,7 @@ import pytest
 from custom_components.metar import (
     MetarConfigEntry,
     _async_update_listener,
+    _migrate_entity_ids,
     async_setup_entry,
     async_unload_entry,
 )
@@ -197,6 +198,59 @@ async def test_unload_entry_returns_false_when_platform_unload_fails():
 # ---------------------------------------------------------------------------
 # _async_update_listener
 # ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# _migrate_entity_ids
+# ---------------------------------------------------------------------------
+
+
+def test_migrate_entity_ids_renames_old_format():
+    """Entities with the old {station}_{key} format are renamed."""
+    hass = MagicMock()
+    entry = _make_entry()
+    entry.entry_id = "test_entry_id"
+
+    old_entity = MagicMock()
+    old_entity.entity_id = "sensor.kord_altimeter"
+
+    mock_registry = MagicMock()
+
+    with (
+        patch("custom_components.metar.er.async_get", return_value=mock_registry),
+        patch(
+            "custom_components.metar.er.async_entries_for_config_entry",
+            return_value=[old_entity],
+        ),
+    ):
+        _migrate_entity_ids(hass, entry, "KORD")
+
+    mock_registry.async_update_entity.assert_called_once_with(
+        "sensor.kord_altimeter", new_entity_id="sensor.metar_kord_altimeter"
+    )
+
+
+def test_migrate_entity_ids_skips_already_migrated():
+    """Entities already in metar_{station}_{key} format are left untouched."""
+    hass = MagicMock()
+    entry = _make_entry()
+    entry.entry_id = "test_entry_id"
+
+    new_entity = MagicMock()
+    new_entity.entity_id = "sensor.metar_kord_altimeter"
+
+    mock_registry = MagicMock()
+
+    with (
+        patch("custom_components.metar.er.async_get", return_value=mock_registry),
+        patch(
+            "custom_components.metar.er.async_entries_for_config_entry",
+            return_value=[new_entity],
+        ),
+    ):
+        _migrate_entity_ids(hass, entry, "KORD")
+
+    mock_registry.async_update_entity.assert_not_called()
 
 
 @pytest.mark.asyncio

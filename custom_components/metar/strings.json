@@ -27,6 +27,44 @@
       "reconfigure_successful": "Station ID updated successfully."
     }
   },
+  "entity": {
+    "sensor": {
+      "station_name":        { "name": "Station Name" },
+      "flight_category":     { "name": "Flight Category" },
+      "wind_speed":          { "name": "Wind Speed" },
+      "wind_direction":      { "name": "Wind Direction" },
+      "wind_gust":           { "name": "Wind Gust" },
+      "visibility":          { "name": "Visibility" },
+      "cloud_cover":         { "name": "Cloud Cover" },
+      "ceiling":             { "name": "Ceiling" },
+      "vertical_visibility": { "name": "Vertical Visibility" },
+      "temperature":         { "name": "Temperature" },
+      "temperature_f":       { "name": "Temperature (F)" },
+      "dewpoint":            { "name": "Dewpoint" },
+      "dewpoint_f":          { "name": "Dewpoint (F)" },
+      "max_temp_6hr":        { "name": "Max Temperature (6 hr)" },
+      "max_temp_6hr_f":      { "name": "Max Temperature (6 hr) (F)" },
+      "min_temp_6hr":        { "name": "Min Temperature (6 hr)" },
+      "min_temp_6hr_f":      { "name": "Min Temperature (6 hr) (F)" },
+      "max_temp_24hr":       { "name": "Max Temperature (24 hr)" },
+      "max_temp_24hr_f":     { "name": "Max Temperature (24 hr) (F)" },
+      "min_temp_24hr":       { "name": "Min Temperature (24 hr)" },
+      "min_temp_24hr_f":     { "name": "Min Temperature (24 hr) (F)" },
+      "altimeter":           { "name": "Altimeter" },
+      "altimeter_inhg":      { "name": "Altimeter (inHg)" },
+      "sea_level_pressure":  { "name": "Sea Level Pressure" },
+      "pressure_tendency":   { "name": "Pressure Tendency" },
+      "precip_1hr":          { "name": "Precipitation (1 hr)" },
+      "precip_3hr":          { "name": "Precipitation (3 hr)" },
+      "precip_6hr":          { "name": "Precipitation (6 hr)" },
+      "precip_24hr":         { "name": "Precipitation (24 hr)" },
+      "snow_depth":          { "name": "Snow Depth" },
+      "obs_time":            { "name": "Observation Time" },
+      "metar_type":          { "name": "Report Type" },
+      "elevation":           { "name": "Station Elevation" },
+      "raw_metar":           { "name": "Raw" }
+    }
+  },
   "options": {
     "step": {
       "init": {
