@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "Add METAR Station",
+        "title": "Add HAMETAR Station",
         "description": "Enter an ICAO station identifier (e.g. KORD, EGLL). Data is fetched from the Aviation Weather Center.",
         "data": {
           "station_id": "Station ID (ICAO)",
@@ -10,7 +10,7 @@
         }
       },
       "reconfigure": {
-        "title": "Change METAR Station",
+        "title": "Change HAMETAR Station",
         "description": "Enter a new ICAO station identifier to replace the current one.",
         "data": {
           "station_id": "Station ID (ICAO)"
@@ -70,7 +70,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "METAR Options",
+        "title": "HAMETAR Options",
         "data": {
           "scan_interval": "Poll interval (minutes)"
         }

@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from custom_components.metar.sensor import (
+from custom_components.hametar.sensor import (
     SENSOR_DESCRIPTIONS,
     MetarSensor,
     MetarSensorEntityDescription,
@@ -222,7 +222,7 @@ def test_native_value_time_since_obs():
     now = datetime(2026, 3, 14, 23, 35, 0, tzinfo=timezone.utc)
     obs = now - timedelta(minutes=47)
     sensor = make_sensor("time_since_obs", data={"obs_time": obs})
-    with patch("custom_components.metar.sensor.datetime") as mock_dt:
+    with patch("custom_components.hametar.sensor.datetime") as mock_dt:
         mock_dt.now.return_value = now
         assert sensor.native_value == 47
 
@@ -390,7 +390,7 @@ async def test_async_setup_entry_creates_all_sensors():
     added = []
     async_add_entities = MagicMock(side_effect=lambda entities: added.extend(list(entities)))
 
-    from custom_components.metar.sensor import async_setup_entry
+    from custom_components.hametar.sensor import async_setup_entry
     await async_setup_entry(hass, entry, async_add_entities)
 
     async_add_entities.assert_called_once()

@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import aiohttp
 import pytest
 
-from custom_components.metar.coordinator import (
+from custom_components.hametar.coordinator import (
     MetarCoordinator,
     _extract_ceiling,
     _obs_time_to_dt,
@@ -259,7 +259,7 @@ def test_normalize_variable_wind():
 async def test_update_raises_on_timeout(hass):
     """TimeoutError from aiohttp becomes UpdateFailed."""
     with patch(
-        "custom_components.metar.coordinator.async_get_clientsession"
+        "custom_components.hametar.coordinator.async_get_clientsession"
     ) as mock_session_fn:
         session = MagicMock()
         session.get = MagicMock(side_effect=asyncio.TimeoutError)
@@ -281,7 +281,7 @@ async def test_update_raises_on_http_error_status(hass):
     mock_response.json = AsyncMock(return_value=[])
 
     with patch(
-        "custom_components.metar.coordinator.async_get_clientsession"
+        "custom_components.hametar.coordinator.async_get_clientsession"
     ) as mock_session_fn:
         session = MagicMock()
         session.get = MagicMock(return_value=mock_response)
@@ -296,7 +296,7 @@ async def test_update_raises_on_http_error_status(hass):
 async def test_update_raises_on_client_error(hass):
     """aiohttp.ClientError becomes UpdateFailed."""
     with patch(
-        "custom_components.metar.coordinator.async_get_clientsession"
+        "custom_components.hametar.coordinator.async_get_clientsession"
     ) as mock_session_fn:
         session = MagicMock()
         session.get = MagicMock(
@@ -319,7 +319,7 @@ async def test_update_raises_when_empty_response(hass, sample_metar):
     mock_response.__aexit__ = AsyncMock(return_value=False)
 
     with patch(
-        "custom_components.metar.coordinator.async_get_clientsession"
+        "custom_components.hametar.coordinator.async_get_clientsession"
     ) as mock_session_fn:
         session = MagicMock()
         session.get = MagicMock(return_value=mock_response)
@@ -340,7 +340,7 @@ async def test_update_success(hass, sample_metar):
     mock_response.__aexit__ = AsyncMock(return_value=False)
 
     with patch(
-        "custom_components.metar.coordinator.async_get_clientsession"
+        "custom_components.hametar.coordinator.async_get_clientsession"
     ) as mock_session_fn:
         session = MagicMock()
         session.get = MagicMock(return_value=mock_response)

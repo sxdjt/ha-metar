@@ -1,6 +1,6 @@
 """Constants for the METAR integration."""
 
-DOMAIN = "metar"
+DOMAIN = "hametar"
 
 CONF_STATION_ID = "station_id"
 DEFAULT_SCAN_INTERVAL = 5  # minutes

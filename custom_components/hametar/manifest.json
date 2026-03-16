@@ -1,6 +1,6 @@
 {
-  "domain": "metar",
-  "name": "METAR",
+  "domain": "hametar",
+  "name": "HAMETAR",
   "codeowners": ["@sxdjt"],
   "config_flow": true,
   "dependencies": [],

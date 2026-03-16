@@ -6,8 +6,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from custom_components.metar.const import CONF_STATION_ID
-from custom_components.metar.diagnostics import async_get_config_entry_diagnostics
+from custom_components.hametar.const import CONF_STATION_ID
+from custom_components.hametar.diagnostics import async_get_config_entry_diagnostics
 
 
 def _make_entry(station_id="KORD", scan_interval=5, options=None, data=None):

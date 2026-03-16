@@ -6,13 +6,13 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from custom_components.metar.config_flow import (
+from custom_components.hametar.config_flow import (
     MetarConfigFlow,
     MetarOptionsFlow,
     _reconfigure_schema,
     _validate_station,
 )
-from custom_components.metar.const import CONF_STATION_ID, DEFAULT_SCAN_INTERVAL
+from custom_components.hametar.const import CONF_STATION_ID, DEFAULT_SCAN_INTERVAL
 
 
 # ---------------------------------------------------------------------------
@@ -39,7 +39,7 @@ async def test_validate_station_cannot_connect():
 
     hass = MagicMock()
     with patch(
-        "custom_components.metar.config_flow.async_get_clientsession",
+        "custom_components.hametar.config_flow.async_get_clientsession",
         return_value=mock_session,
     ):
         assert await _validate_station(hass, "KORD") == "cannot_connect"
@@ -59,7 +59,7 @@ async def test_validate_station_not_found():
 
     hass = MagicMock()
     with patch(
-        "custom_components.metar.config_flow.async_get_clientsession",
+        "custom_components.hametar.config_flow.async_get_clientsession",
         return_value=mock_session,
     ):
         assert await _validate_station(hass, "ZZZZ") == "station_not_found"
@@ -79,7 +79,7 @@ async def test_validate_station_non_list_response():
 
     hass = MagicMock()
     with patch(
-        "custom_components.metar.config_flow.async_get_clientsession",
+        "custom_components.hametar.config_flow.async_get_clientsession",
         return_value=mock_session,
     ):
         assert await _validate_station(hass, "KORD") == "station_not_found"
@@ -104,7 +104,7 @@ async def test_validate_station_json_parse_error():
 
     hass = MagicMock()
     with patch(
-        "custom_components.metar.config_flow.async_get_clientsession",
+        "custom_components.hametar.config_flow.async_get_clientsession",
         return_value=mock_session,
     ):
         assert await _validate_station(hass, "KORD") == "cannot_connect"
@@ -123,7 +123,7 @@ async def test_validate_station_http_error():
 
     hass = MagicMock()
     with patch(
-        "custom_components.metar.config_flow.async_get_clientsession",
+        "custom_components.hametar.config_flow.async_get_clientsession",
         return_value=mock_session,
     ):
         assert await _validate_station(hass, "KORD") == "cannot_connect"
@@ -142,7 +142,7 @@ async def test_validate_station_204_no_content():
 
     hass = MagicMock()
     with patch(
-        "custom_components.metar.config_flow.async_get_clientsession",
+        "custom_components.hametar.config_flow.async_get_clientsession",
         return_value=mock_session,
     ):
         assert await _validate_station(hass, "XXXX") == "station_not_found"
@@ -162,7 +162,7 @@ async def test_validate_station_success(sample_metar):
 
     hass = MagicMock()
     with patch(
-        "custom_components.metar.config_flow.async_get_clientsession",
+        "custom_components.hametar.config_flow.async_get_clientsession",
         return_value=mock_session,
     ):
         assert await _validate_station(hass, "KORD") is None
@@ -182,7 +182,7 @@ async def test_validate_station_strips_and_uppercases():
 
     hass = MagicMock()
     with patch(
-        "custom_components.metar.config_flow.async_get_clientsession",
+        "custom_components.hametar.config_flow.async_get_clientsession",
         return_value=mock_session,
     ):
         # " kord " should normalize to "KORD" and pass
@@ -226,7 +226,7 @@ async def test_step_user_creates_entry_on_valid_input():
     flow = _build_config_flow(MagicMock())
 
     with patch(
-        "custom_components.metar.config_flow._validate_station",
+        "custom_components.hametar.config_flow._validate_station",
         new=AsyncMock(return_value=None),
     ):
         result = await flow.async_step_user(
@@ -245,7 +245,7 @@ async def test_step_user_shows_error_on_invalid_station():
     flow = _build_config_flow(MagicMock())
 
     with patch(
-        "custom_components.metar.config_flow._validate_station",
+        "custom_components.hametar.config_flow._validate_station",
         new=AsyncMock(return_value="station_not_found"),
     ):
         result = await flow.async_step_user(
@@ -263,7 +263,7 @@ async def test_step_user_abort_on_duplicate():
     flow._abort_if_unique_id_configured = MagicMock(side_effect=Exception("already configured"))
 
     with patch(
-        "custom_components.metar.config_flow._validate_station",
+        "custom_components.hametar.config_flow._validate_station",
         new=AsyncMock(return_value=None),
     ):
         with pytest.raises(Exception, match="already configured"):
@@ -278,7 +278,7 @@ async def test_step_user_shows_form_on_cannot_connect():
     flow = _build_config_flow(MagicMock())
 
     with patch(
-        "custom_components.metar.config_flow._validate_station",
+        "custom_components.hametar.config_flow._validate_station",
         new=AsyncMock(return_value="cannot_connect"),
     ):
         result = await flow.async_step_user(
@@ -353,7 +353,7 @@ async def test_reconfigure_success():
     flow = _build_reconfigure_flow(current_station="KORD")
 
     with patch(
-        "custom_components.metar.config_flow._validate_station",
+        "custom_components.hametar.config_flow._validate_station",
         new=AsyncMock(return_value=None),
     ):
         result = await flow.async_step_reconfigure(
@@ -372,7 +372,7 @@ async def test_reconfigure_shows_error_on_invalid_station():
     flow = _build_reconfigure_flow()
 
     with patch(
-        "custom_components.metar.config_flow._validate_station",
+        "custom_components.hametar.config_flow._validate_station",
         new=AsyncMock(return_value="station_not_found"),
     ):
         result = await flow.async_step_reconfigure(
@@ -392,7 +392,7 @@ async def test_reconfigure_aborts_on_duplicate():
     )
 
     with patch(
-        "custom_components.metar.config_flow._validate_station",
+        "custom_components.hametar.config_flow._validate_station",
         new=AsyncMock(return_value=None),
     ):
         with pytest.raises(Exception, match="already configured"):

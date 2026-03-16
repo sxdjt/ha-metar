@@ -6,14 +6,14 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from custom_components.metar import (
+from custom_components.hametar import (
     MetarConfigEntry,
     _async_update_listener,
     _migrate_entity_ids,
     async_setup_entry,
     async_unload_entry,
 )
-from custom_components.metar.const import CONF_STATION_ID, DEFAULT_SCAN_INTERVAL
+from custom_components.hametar.const import CONF_STATION_ID, DEFAULT_SCAN_INTERVAL
 
 
 def _make_entry(data=None, options=None):
@@ -48,7 +48,7 @@ async def test_setup_entry_stores_coordinator_in_runtime_data():
     mock_coordinator = MagicMock()
     mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
-    with patch("custom_components.metar.MetarCoordinator", return_value=mock_coordinator):
+    with patch("custom_components.hametar.MetarCoordinator", return_value=mock_coordinator):
         result = await async_setup_entry(hass, entry)
 
     assert result is True
@@ -64,7 +64,7 @@ async def test_setup_entry_calls_first_refresh():
     mock_coordinator = MagicMock()
     mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
-    with patch("custom_components.metar.MetarCoordinator", return_value=mock_coordinator):
+    with patch("custom_components.hametar.MetarCoordinator", return_value=mock_coordinator):
         await async_setup_entry(hass, entry)
 
     mock_coordinator.async_config_entry_first_refresh.assert_awaited_once()
@@ -73,7 +73,7 @@ async def test_setup_entry_calls_first_refresh():
 @pytest.mark.asyncio
 async def test_setup_entry_forwards_to_sensor_platform():
     """async_forward_entry_setups is called with the sensor platform."""
-    from custom_components.metar.const import PLATFORMS
+    from custom_components.hametar.const import PLATFORMS
 
     hass = _make_hass()
     entry = _make_entry()
@@ -81,7 +81,7 @@ async def test_setup_entry_forwards_to_sensor_platform():
     mock_coordinator = MagicMock()
     mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
-    with patch("custom_components.metar.MetarCoordinator", return_value=mock_coordinator):
+    with patch("custom_components.hametar.MetarCoordinator", return_value=mock_coordinator):
         await async_setup_entry(hass, entry)
 
     hass.config_entries.async_forward_entry_setups.assert_awaited_once_with(entry, PLATFORMS)
@@ -96,7 +96,7 @@ async def test_setup_entry_uses_data_scan_interval():
     mock_coordinator = MagicMock()
     mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
-    with patch("custom_components.metar.MetarCoordinator", return_value=mock_coordinator) as cls:
+    with patch("custom_components.hametar.MetarCoordinator", return_value=mock_coordinator) as cls:
         await async_setup_entry(hass, entry)
 
     # Third positional arg to MetarCoordinator is scan_interval
@@ -116,7 +116,7 @@ async def test_setup_entry_options_override_data_scan_interval():
     mock_coordinator = MagicMock()
     mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
-    with patch("custom_components.metar.MetarCoordinator", return_value=mock_coordinator) as cls:
+    with patch("custom_components.hametar.MetarCoordinator", return_value=mock_coordinator) as cls:
         await async_setup_entry(hass, entry)
 
     _, args, _ = cls.mock_calls[0]
@@ -132,7 +132,7 @@ async def test_setup_entry_uses_default_scan_interval_when_absent():
     mock_coordinator = MagicMock()
     mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
-    with patch("custom_components.metar.MetarCoordinator", return_value=mock_coordinator) as cls:
+    with patch("custom_components.hametar.MetarCoordinator", return_value=mock_coordinator) as cls:
         await async_setup_entry(hass, entry)
 
     _, args, _ = cls.mock_calls[0]
@@ -148,7 +148,7 @@ async def test_setup_entry_registers_options_listener():
     mock_coordinator = MagicMock()
     mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
-    with patch("custom_components.metar.MetarCoordinator", return_value=mock_coordinator):
+    with patch("custom_components.hametar.MetarCoordinator", return_value=mock_coordinator):
         await async_setup_entry(hass, entry)
 
     entry.async_on_unload.assert_called_once()
@@ -173,7 +173,7 @@ async def test_unload_entry_returns_true_on_success():
 @pytest.mark.asyncio
 async def test_unload_entry_calls_unload_platforms():
     """async_unload_entry delegates to async_unload_platforms."""
-    from custom_components.metar.const import PLATFORMS
+    from custom_components.hametar.const import PLATFORMS
 
     hass = _make_hass()
     entry = _make_entry()
@@ -217,9 +217,9 @@ def test_migrate_entity_ids_renames_old_format():
     mock_registry = MagicMock()
 
     with (
-        patch("custom_components.metar.er.async_get", return_value=mock_registry),
+        patch("custom_components.hametar.er.async_get", return_value=mock_registry),
         patch(
-            "custom_components.metar.er.async_entries_for_config_entry",
+            "custom_components.hametar.er.async_entries_for_config_entry",
             return_value=[old_entity],
         ),
     ):
@@ -242,9 +242,9 @@ def test_migrate_entity_ids_skips_already_migrated():
     mock_registry = MagicMock()
 
     with (
-        patch("custom_components.metar.er.async_get", return_value=mock_registry),
+        patch("custom_components.hametar.er.async_get", return_value=mock_registry),
         patch(
-            "custom_components.metar.er.async_entries_for_config_entry",
+            "custom_components.hametar.er.async_entries_for_config_entry",
             return_value=[new_entity],
         ),
     ):
