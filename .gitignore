@@ -6,6 +6,7 @@ __pycache__/
 # Home Assistant local dev files
 CLAUDE.md
 claude.md
+.coverage
 
 # Editor
 .vscode/
