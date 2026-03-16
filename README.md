@@ -234,11 +234,15 @@ Some entities are not frequently reported, or are only reported when they are ne
 ## Removal
 
 1. Go to **Settings -> Devices & Services**.
-2. Find the **METAR** integration and click the three-dot menu next to the station entry.
+2. Find the **HAMETAR** integration and click the three-dot menu next to the station entry.
 3. Select **Delete**.
 4. Restart Home Assistant (optional but recommended to fully clean up entities).
-5. To completely remove the integration files, delete the `custom_components/metar/` directory from your Home Assistant configuration folder and restart.
+5. To completely remove the integration files, delete the `custom_components/hametar/` directory from your Home Assistant configuration folder and restart.
 
 ## Contributing
 
 Issues and pull requests are welcome.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
