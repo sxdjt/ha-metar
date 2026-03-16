@@ -22,7 +22,7 @@
       "max_temp_24hr_f":     { "default": "mdi:thermometer-chevron-up" },
       "min_temp_24hr":       { "default": "mdi:thermometer-chevron-down" },
       "min_temp_24hr_f":     { "default": "mdi:thermometer-chevron-down" },
-      "altimeter":           { "default": "mdi:gauge" },
+      "qnh":                 { "default": "mdi:gauge" },
       "altimeter_inhg":      { "default": "mdi:gauge" },
       "sea_level_pressure":  { "default": "mdi:gauge-low" },
       "pressure_tendency":   { "default": "mdi:gauge" },

@@ -24,7 +24,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-# ICAO station identifiers are 3-4 uppercase letters (some non-US stations use 3)
+# ICAO station identifiers are 3-4 uppercase letters (some non-US stations use 3).
 _STATION_RE = re.compile(r"^[A-Z0-9]{3,4}$")
 
 
@@ -141,7 +141,7 @@ class MetarConfigFlow(ConfigFlow, domain=DOMAIN):
             if error:
                 errors["base"] = error
             else:
-                # Prevent duplicate entries for the same station
+                # Prevent duplicate entries for the same station.
                 await self.async_set_unique_id(station_id)
                 self._abort_if_unique_id_configured()
 
@@ -168,7 +168,7 @@ class MetarOptionsFlow(OptionsFlow):
         current_interval = self.config_entry.data.get(
             CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL
         )
-        # Options override data when present
+        # Options override data when present.
         current_interval = self.config_entry.options.get(
             CONF_SCAN_INTERVAL, current_interval
         )

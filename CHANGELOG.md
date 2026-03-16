@@ -18,13 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "Observation Time" sensor now displays the actual UTC timestamp string
   (e.g. `2026-03-14 23:35Z`) instead of a relative "x minutes ago" value.
+- Renamed "Altimeter" sensor (hPa) to "QNH" (`sensor.metar_{station}_qnh`),
+  reflecting the international standard term. The companion "Altimeter (inHg)"
+  sensor is unchanged.
 
 ### Fixed
 
 - Altimeter readings now correctly normalized to hPa for all stations. US stations
   report the A-group (inHg, e.g. A2992); international stations report the Q-group
   (hPa, e.g. Q1013). The integration parses the prefix from the raw METAR string
-  and converts A-group values to hPa so that both the Altimeter (hPa) and
+  and converts A-group values to hPa so that both the QNH (hPa) and
   Altimeter (inHg) sensors are accurate regardless of station origin.
 
 ## [1.0.1] - 2026-03-14
@@ -32,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Sensor entity IDs now follow the `sensor.metar_{station}_{key}` format
-  (e.g. `sensor.metar_kpdx_altimeter`) instead of the previous
+  (e.g. `sensor.metar_kpdx_wind_speed`) instead of the previous
   `sensor.{station}_{key}` format. Existing entities are automatically
   migrated on reload via the entity registry.
 

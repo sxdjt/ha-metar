@@ -13,7 +13,6 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry  # noqa: TC002
 from homeassistant.const import (
     DEGREE,
     UnitOfLength,
@@ -21,7 +20,6 @@ from homeassistant.const import (
     UnitOfSpeed,
     UnitOfTemperature,
     UnitOfTime,
-    UnitOfVolumetricFlux,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
@@ -115,7 +113,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfSpeed.KNOTS,
         device_class=SensorDeviceClass.WIND_SPEED,
         state_class=SensorStateClass.MEASUREMENT,
-        # None (unavailable) when no gust group is present in the METAR
+        # None (unavailable) when no gust group is present in the METAR.
         value_fn=lambda d: d.get("wind_gust"),
     ),
 
@@ -135,7 +133,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         key="cloud_cover",
         name="Cloud Cover",
         icon="mdi:weather-cloudy",
-        # Categorical: SKC / CLR / FEW / SCT / BKN / OVC / VV
+        # Categorical values: SKC / CLR / FEW / SCT / BKN / OVC / VV.
         value_fn=lambda d: d.get("cloud_cover"),
     ),
     MetarSensorEntityDescription(
@@ -145,7 +143,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfLength.FEET,
         device_class=SensorDeviceClass.DISTANCE,
         state_class=SensorStateClass.MEASUREMENT,
-        # None (unavailable) when there is no BKN, OVC, or VV layer
+        # None (unavailable) when there is no BKN, OVC, or VV layer.
         value_fn=lambda d: d.get("ceiling"),
     ),
     MetarSensorEntityDescription(
@@ -302,12 +300,12 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
     ),
 
     # --- Pressure ---
-    # Altimeter setting: the AWC JSON API returns hPa, but the METAR A-group
-    # (e.g. A2992) is natively in inHg — that is what pilots dial into their
-    # altimeters. Both units are provided.
+    # QNH (altimeter setting in hPa): international standard term used outside
+    # the US. The METAR A-group (e.g. A2992) is natively in inHg — that is
+    # what pilots dial into their altimeters in the US. Both units are provided.
     MetarSensorEntityDescription(
-        key="altimeter",
-        name="Altimeter",
+        key="qnh",
+        name="QNH",
         icon="mdi:gauge",
         native_unit_of_measurement=UnitOfPressure.HPA,
         suggested_unit_of_measurement=UnitOfPressure.HPA,
@@ -340,7 +338,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         name="Pressure Tendency",
         icon="mdi:gauge",
         native_unit_of_measurement=UnitOfPressure.HPA,
-        # Positive = rising, negative = falling over the past 3 hours
+        # Positive = rising, negative = falling over the past 3 hours.
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
@@ -505,7 +503,7 @@ class MetarSensor(MetarEntity, SensorEntity):
         """Return the entity portion of the suggested object ID.
 
         HA prepends the device name slug (e.g. "metar_kpdx") to this value,
-        producing entity IDs like sensor.metar_kpdx_altimeter.
+        producing entity IDs like sensor.metar_kpdx_wind_speed.
         """
         return self.entity_description.key
 
@@ -534,7 +532,7 @@ class MetarSensor(MetarEntity, SensorEntity):
             }
 
         if key == "wind_direction":
-            # Lets automations distinguish VRB (variable) from a true 0-degree reading
+            # Lets automations distinguish VRB (variable) from a true 0-degree reading.
             return {"variable": data.get("wind_variable", False)}
 
         if key == "cloud_cover":

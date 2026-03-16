@@ -80,8 +80,8 @@ def test_sensor_unique_id():
 
 
 def test_sensor_unique_id_uses_station_id():
-    sensor = make_sensor("altimeter", station_id="EGLL")
-    assert sensor._attr_unique_id == "EGLL_altimeter"
+    sensor = make_sensor("qnh", station_id="EGLL")
+    assert sensor._attr_unique_id == "EGLL_qnh"
 
 
 def test_sensor_name_is_entity_portion_only():
@@ -106,8 +106,8 @@ def test_sensor_suggested_object_id():
 
 
 def test_sensor_suggested_object_id_different_station():
-    sensor = make_sensor("altimeter", station_id="EGLL")
-    assert sensor.suggested_object_id == "altimeter"
+    sensor = make_sensor("qnh", station_id="EGLL")
+    assert sensor.suggested_object_id == "qnh"
 
 
 def test_sensor_suggested_object_id_no_station_prefix():
@@ -146,8 +146,8 @@ def test_native_value_dewpoint_f():
     assert sensor.native_value == pytest.approx(50.0)
 
 
-def test_native_value_altimeter_hpa():
-    sensor = make_sensor("altimeter", data={"altimeter": 1013.2})
+def test_native_value_qnh_hpa():
+    sensor = make_sensor("qnh", data={"altimeter": 1013.2})
     assert sensor.native_value == pytest.approx(1013.2)
 
 
@@ -349,7 +349,7 @@ _ENABLED_BY_DEFAULT = {
     "station_name", "flight_category", "wind_speed", "wind_direction",
     "wind_gust", "visibility", "cloud_cover", "ceiling",
     "temperature", "temperature_f", "dewpoint", "dewpoint_f",
-    "altimeter", "altimeter_inhg", "sea_level_pressure",
+    "qnh", "altimeter_inhg", "sea_level_pressure",
     "precip_1hr", "obs_time", "obs_time_local", "time_since_obs", "metar_type", "elevation", "raw_metar",
 }
 

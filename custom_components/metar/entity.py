@@ -19,7 +19,7 @@ class MetarEntity(CoordinatorEntity[MetarCoordinator]):
 
     _attr_attribution = ATTRIBUTION
     # has_entity_name=True: HA prepends the device name ("EGLL") to the entity
-    # name ("Altimeter") automatically, giving display name "EGLL Altimeter".
+    # name ("QNH") automatically, giving display name "EGLL QNH".
     # suggested_object_id on MetarSensor controls the entity ID independently.
     _attr_has_entity_name = True
 

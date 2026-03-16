@@ -50,7 +50,7 @@
       "max_temp_24hr_f":     { "name": "Max Temperature (24 hr) (F)" },
       "min_temp_24hr":       { "name": "Min Temperature (24 hr)" },
       "min_temp_24hr_f":     { "name": "Min Temperature (24 hr) (F)" },
-      "altimeter":           { "name": "Altimeter" },
+      "qnh":                 { "name": "QNH" },
       "altimeter_inhg":      { "name": "Altimeter (inHg)" },
       "sea_level_pressure":  { "name": "Sea Level Pressure" },
       "pressure_tendency":   { "name": "Pressure Tendency" },

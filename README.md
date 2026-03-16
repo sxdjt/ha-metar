@@ -15,7 +15,7 @@ sensor entities.
 
 ## Integration Quality 
 
-HAMETAR meets the requirements for a [Silver rating](https://developers.home-assistant.io/docs/core/integration-quality-scale/) on the Home Assistant Integration Quality Scale.  While not a native HA integration, quality and assurance matters.  See the current [scorecard](SCORECARD.md) for test results and validation.
+HAMETAR meets the requirements for a [Gold rating](https://developers.home-assistant.io/docs/core/integration-quality-scale/) on the Home Assistant Integration Quality Scale.  While not a native HA integration, quality and assurance matters.  See the current [scorecard](SCORECARD.md) for test results and validation.
 
 ## Sensors
 
@@ -71,11 +71,11 @@ Both Celsius and Fahrenheit sensors are provided regardless of your HA unit syst
 
 ### Pressure
 
-The altimeter setting is always presented in both hPa and inHg. US stations report in inHg (A-group, e.g. A2992); international stations report in hPa (Q-group, e.g. Q1013). The integration normalizes to hPa internally and derives the inHg value, so both sensors are always available regardless of station origin.
+The QNH (altimeter setting) is always presented in both hPa and inHg. US stations report in inHg (A-group, e.g. A2992); international stations report in hPa (Q-group, e.g. Q1013). The integration normalizes to hPa internally and derives the inHg value, so both sensors are always available regardless of station origin.
 
 | Sensor | Unit | Type | Notes |
 |--------|------|------|-------|
-| Altimeter | hPa | Calculated | Parsed from raw METAR string; A-group converted from inHg |
+| QNH | hPa | Calculated | Parsed from raw METAR string; A-group converted from inHg |
 | Altimeter (inHg) | inHg | Calculated | Converted from hPa |
 | Sea Level Pressure | hPa | Raw | |
 | Pressure Tendency | hPa | Raw | Change over past 3 hours; *disabled by default*; diagnostic |

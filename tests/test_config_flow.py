@@ -86,6 +86,31 @@ async def test_validate_station_non_list_response():
 
 
 @pytest.mark.asyncio
+async def test_validate_station_json_parse_error():
+    """Invalid JSON content type from the API returns cannot_connect."""
+    from aiohttp import ContentTypeError
+    from unittest.mock import MagicMock as _MM
+
+    mock_response = AsyncMock()
+    mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+    mock_response.__aexit__ = AsyncMock(return_value=False)
+    mock_response.status = 200
+    mock_response.json = AsyncMock(
+        side_effect=ContentTypeError(_MM(), _MM())
+    )
+
+    mock_session = MagicMock()
+    mock_session.get = MagicMock(return_value=mock_response)
+
+    hass = MagicMock()
+    with patch(
+        "custom_components.metar.config_flow.async_get_clientsession",
+        return_value=mock_session,
+    ):
+        assert await _validate_station(hass, "KORD") == "cannot_connect"
+
+
+@pytest.mark.asyncio
 async def test_validate_station_http_error():
     """Non-200/204 HTTP status returns cannot_connect."""
     mock_response = AsyncMock()

@@ -1,21 +1,21 @@
 # HAMETAR Integration Scorecard
 
-Test run: 2026-03-14 23:50:00 PDT
+Test run: 2026-03-16 09:43:26 PDT
 
-## Test Suite - 126 / 126 Passed
+## Test Suite - 127 / 127 Passed
 
 | Module | Tests | Status |
 |---|---|---|
-| `test_config_flow.py` | 22 | Pass |
+| `test_config_flow.py` | 23 | Pass |
 | `test_coordinator.py` | 37 | Pass |
 | `test_diagnostics.py` | 3 | Pass |
 | `test_init.py` | 13 | Pass |
 | `test_sensor.py` | 49 | Pass |
-| **Total** | **126** | **All passing** |
+| **Total** | **127** | **All passing** |
 
 ---
 
-### test_config_flow.py (22 tests)
+### test_config_flow.py (23 tests)
 
 | Test | Status |
 |---|---|
@@ -23,6 +23,7 @@ Test run: 2026-03-14 23:50:00 PDT
 | `test_validate_station_cannot_connect` | Pass |
 | `test_validate_station_not_found` | Pass |
 | `test_validate_station_non_list_response` | Pass |
+| `test_validate_station_json_parse_error` | Pass |
 | `test_validate_station_http_error` | Pass |
 | `test_validate_station_204_no_content` | Pass |
 | `test_validate_station_success` | Pass |
@@ -132,7 +133,7 @@ Test run: 2026-03-14 23:50:00 PDT
 | `test_native_value_when_field_missing` | Pass |
 | `test_native_value_temperature_f` | Pass |
 | `test_native_value_dewpoint_f` | Pass |
-| `test_native_value_altimeter_hpa` | Pass |
+| `test_native_value_qnh_hpa` | Pass |
 | `test_native_value_altimeter_inhg` | Pass |
 | `test_native_value_flight_category` | Pass |
 | `test_native_value_visibility` | Pass |
@@ -233,4 +234,4 @@ Test run: 2026-03-14 23:50:00 PDT
 
 ---
 
-**Summary:** 126/126 tests passing. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold complete except `brands` (requires a separate PR to home-assistant/brands).
+**Summary:** 127/127 tests passing. 100% code coverage. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold complete.

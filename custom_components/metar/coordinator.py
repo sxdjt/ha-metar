@@ -40,9 +40,9 @@ def _parse_altimeter_hpa(raw_metar: str | None, api_value: float | None) -> floa
             if prefix == "A":
                 inhg = int(digits) / 100.0
                 return round(inhg * 33.8639, 1)
-            # Q-group: value is already hPa
+            # Q-group: value is already hPa.
             return float(digits)
-    # Fall back to API value (assumed hPa when prefix cannot be determined)
+    # Fall back to API value (assumed hPa when prefix cannot be determined).
     return api_value
 
 
@@ -160,7 +160,7 @@ class MetarCoordinator(DataUpdateCoordinator[dict]):
         """
         clouds = raw.get("clouds") or []
 
-        # Wind direction may be an integer degrees value or the string "VRB"
+        # Wind direction may be an integer degrees value or the string "VRB".
         wdir_raw = raw.get("wdir")
         if wdir_raw == "VRB" or wdir_raw is None:
             wind_direction = None
@@ -169,7 +169,7 @@ class MetarCoordinator(DataUpdateCoordinator[dict]):
             wind_direction = int(wdir_raw)
             wind_variable = False
 
-        # obsTime is a Unix epoch integer; convert to an aware datetime for HA
+        # obsTime is a Unix epoch integer; convert to an aware datetime for HA.
         obs_dt = _obs_time_to_dt(raw.get("obsTime"))
 
         return {
