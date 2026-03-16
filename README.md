@@ -1,8 +1,8 @@
 # HAMETAR - Home Assistant METAR Integration
 
-![GitHub Release](https://img.shields.io/github/v/release/sxdjt/horizontal-waterfall-history-card?style=for-the-badge)
+![GitHub Release](https://img.shields.io/github/v/release/sxdjt/ha-metar?style=for-the-badge)
 [![AI Assisted](https://img.shields.io/badge/AI-Claude%20Code-AAAAAA.svg?style=for-the-badge)](https://claude.ai/code)
-![GitHub License](https://img.shields.io/github/license/sxdjt/horizontal-waterfall-history-card?style=for-the-badge)
+![GitHub License](https://img.shields.io/github/license/sxdjt/ha-metar?style=for-the-badge)
 
 A Home Assistant custom integration that fetches METAR aviation weather observations
 from the [Aviation Weather Center](https://aviationweather.gov/) and exposes them as
