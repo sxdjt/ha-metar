@@ -160,9 +160,9 @@ The station ID can be changed after setup via the **three-dot menu -> Reconfigur
 
 ### Manual
 
-1. Copy `custom_components/metar/` into your Home Assistant `config/custom_components/` directory.
+1. Copy `custom_components/hametar/` into your Home Assistant `config/custom_components/` directory.
 2. Restart Home Assistant.
-3. Go to **Settings -> Devices & Services -> Add Integration** and search for **METAR**.
+3. Go to **Settings -> Devices & Services -> Add Integration** and search for **HAMETAR**.
 4. Enter the ICAO station identifier (e.g. `KORD`, `EGLL`, `YSSY`).
 5. Set the poll interval in minutes (minimum 1, default 5).
 

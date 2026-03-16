@@ -7,15 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-03-16
+
 ### Added
 
 - New "Observation Time (Local)" sensor (`sensor.metar_{station}_obs_time_local`)
   showing the observation time converted to the system's local timezone.
 - New "Time Since Observation" sensor (`sensor.metar_{station}_time_since_obs`)
   showing how many minutes have elapsed since the last reported observation.
+- MIT license.
 
 ### Changed
 
+- Integration display name changed from "METAR" to "HAMETAR".
 - "Observation Time" sensor now displays the actual UTC timestamp string
   (e.g. `2026-03-14 23:35Z`) instead of a relative "x minutes ago" value.
 - Renamed "Altimeter" sensor (hPa) to "QNH" (`sensor.metar_{station}_qnh`),
