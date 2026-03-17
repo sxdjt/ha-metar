@@ -21,9 +21,76 @@ sensor entities.
 
 HAMETAR meets the requirements for a [Gold rating](https://developers.home-assistant.io/docs/core/integration-quality-scale/) on the Home Assistant Integration Quality Scale.  While not a native HA integration, quality and assurance matters.  See the current [scorecard](SCORECARD.md) for test results and validation.
 
+## Configuration
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| Station ID | Yes | - | ICAO station identifier, 3-4 alphanumeric characters (e.g. `KORD`, `EGLL`, `YSSY`). Must be a station with data in the Aviation Weather Center database. |
+| Poll interval | No | 5 | How often to fetch a new observation, in minutes. Minimum 1, maximum 10080 (1 week). METARs are issued roughly hourly; values below 5 minutes provide no additional data. |
+
+## Installation
+
+### HACS
+
+Add this repository as a custom HACS repository (type: Integration), then install from the HACS integrations page.
+
 ## Sensors
 
 Sensors marked *disabled by default* are rarely reported and must be enabled manually in **Settings -> Devices & Services -> [station] -> entities**.
+
+## Example Sensor Output
+
+# HAMETAR - Example Sensor Output
+
+Station: **EDBB** (Berlin Tegel)
+Sample observation: `EDBB 160950Z 25012KT 9999 FEW035 08/03 Q1018`
+
+| Sensor | Value |
+|--------|-------|
+| `sensor.metar_edbb_station_name` | Berlin Tegel |
+| `sensor.metar_edbb_altimeter_inhg` | 30.06 inHg |
+| `sensor.metar_edbb_ceiling` | unavailable |
+| `sensor.metar_edbb_cloud_cover` | FEW |
+| `sensor.metar_edbb_dewpoint_f` | 37.4 F |
+| `sensor.metar_edbb_dewpoint` | 3.0 C |
+| `sensor.metar_edbb_elevation` | 122 ft |
+| `sensor.metar_edbb_flight_category` | VFR |
+| `sensor.metar_edbb_max_temp_24hr_f` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_max_temp_24hr` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_max_temp_6hr_f` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_max_temp_6hr` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_metar_type` | METAR |
+| `sensor.metar_edbb_min_temp_24hr_f` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_min_temp_24hr` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_min_temp_6hr_f` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_min_temp_6hr` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_obs_time_local` | 2026-03-16 10:50 CET |
+| `sensor.metar_edbb_obs_time` | 2026-03-16 09:50Z |
+| `sensor.metar_edbb_precip_1hr` | unavailable |
+| `sensor.metar_edbb_precip_24hr` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_precip_3hr` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_precip_6hr` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_pressure_tendency` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_qnh` | 1018.0 hPa |
+| `sensor.metar_edbb_raw_metar` | EDBB 160950Z 25012KT 9999 FEW035 08/03 Q1018 |
+| `sensor.metar_edbb_sea_level_pressure` | 1018.0 hPa |
+| `sensor.metar_edbb_snow_depth` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_temperature_f` | 46.4 F |
+| `sensor.metar_edbb_temperature` | 8.0 C |
+| `sensor.metar_edbb_time_since_obs` | 12 min |
+| `sensor.metar_edbb_vertical_visibility` | unavailable *(disabled by default)* |
+| `sensor.metar_edbb_visibility` | 10+ SM |
+| `sensor.metar_edbb_wind_direction` | 250 deg |
+| `sensor.metar_edbb_wind_gust` | unavailable |
+| `sensor.metar_edbb_wind_speed` | 12 kt |
+
+**Notes:**
+- "Disabled by default" - Entities are not commonly reported.  They exist in the registry but are off until manually enabled.
+- `ceiling` is unavailable because the only cloud layer is FEW (no BKN/OVC/VV layer).
+- `wind_gust` is unavailable because no gust group was reported.
+
+
+## Sensor Details
 
 ### Identification
 
@@ -144,31 +211,6 @@ Several sensors carry supplemental data as entity attributes.
 |-----------|-------------|------|
 | `latitude` | Station latitude (decimal degrees) | Raw |
 | `longitude` | Station longitude (decimal degrees) | Raw |
-
-## Configuration
-
-| Parameter | Required | Default | Description |
-|-----------|----------|---------|-------------|
-| Station ID | Yes | - | ICAO station identifier, 3-4 alphanumeric characters (e.g. `KORD`, `EGLL`, `YSSY`). Must be a station with data in the Aviation Weather Center database. |
-| Poll interval | No | 5 | How often to fetch a new observation, in minutes. Minimum 1, maximum 10080 (1 week). METARs are issued roughly hourly; values below 5 minutes provide no additional data. |
-
-The poll interval can be changed after setup via the integration's **Configure** option in Settings -> Devices & Services without removing and re-adding the station.
-
-The station ID can be changed after setup via the **three-dot menu -> Reconfigure** option, which updates the station and reloads the integration.
-
-## Installation
-
-### Manual
-
-1. Copy `custom_components/hametar/` into your Home Assistant `config/custom_components/` directory.
-2. Restart Home Assistant.
-3. Go to **Settings -> Devices & Services -> Add Integration** and search for **HAMETAR**.
-4. Enter the ICAO station identifier (e.g. `KORD`, `EGLL`, `YSSY`).
-5. Set the poll interval in minutes (minimum 1, default 5).
-
-### HACS
-
-Add this repository as a custom HACS repository (type: Integration), then install from the HACS integrations page.
 
 ## Data Source and Updates
 
