@@ -1,6 +1,6 @@
 # HAMETAR Integration Scorecard
 
-Test run: 2026-03-16 09:43:26 PDT
+Test run: 2026-03-16 22:54:24 PDT
 
 ## Test Suite - 127 / 127 Passed
 
@@ -174,7 +174,7 @@ Test run: 2026-03-16 09:43:26 PDT
 |---|---|
 | action-setup | Exempt |
 | appropriate-polling | Done |
-| brands | * TO DO * |
+| brands | Done |
 | common-modules | Done |
 | config-flow | Done |
 | config-flow-test-coverage | Done |
@@ -234,4 +234,4 @@ Test run: 2026-03-16 09:43:26 PDT
 
 ---
 
-**Summary:** 127/127 tests passing. 100% code coverage. Bronze complete except `brands` (requires a separate PR to home-assistant/brands). Silver complete. Gold complete.
+**Summary:** 127/127 tests passing. 100% code coverage. Bronze complete. Silver complete. Gold complete.

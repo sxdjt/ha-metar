@@ -6,7 +6,7 @@ rules:
     status: exempt
     comment: Integration does not register custom service actions.
   appropriate-polling: done
-  brands: todo
+  brands: done
   common-modules: done
   config-flow: done
   config-flow-test-coverage: done
