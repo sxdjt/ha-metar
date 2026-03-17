@@ -32,7 +32,7 @@ HAMETAR meets the requirements for a [Gold rating](https://developers.home-assis
 
 ### HACS
 
-Add this repository as a custom HACS repository (type: Integration), then install from the HACS integrations page.
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=sxdjt&repository=ha-metar)
 
 ## Sensors
 
