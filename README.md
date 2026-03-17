@@ -19,7 +19,7 @@ sensor entities.
 
 ## Integration Quality 
 
-HAMETAR meets the requirements for a [Gold rating](https://developers.home-assistant.io/docs/core/integration-quality-scale/) on the Home Assistant Integration Quality Scale.  While not a native HA integration, quality and assurance matters.  See the current [scorecard](SCORECARD.md) for test results and validation.
+HAMETAR meets the requirements for a [Platinum rating](https://developers.home-assistant.io/docs/core/integration-quality-scale/) on the Home Assistant Integration Quality Scale.  While not a native HA integration, quality and assurance matters.  See the current [scorecard](SCORECARD.md) for test results and validation.
 
 ## Configuration
 

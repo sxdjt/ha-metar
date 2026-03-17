@@ -6,6 +6,7 @@ import asyncio
 import logging
 from datetime import datetime, timezone
 from datetime import timedelta
+from typing import Any
 
 import re
 
@@ -74,7 +75,7 @@ def _parse_visibility(raw: str | float | int | None) -> float | None:
         return None
 
 
-def _extract_ceiling(clouds: list[dict] | None) -> int | None:
+def _extract_ceiling(clouds: list[dict[str, Any]] | None) -> int | None:
     """Return the height (feet) of the lowest BKN, OVC, or VV cloud layer.
 
     Returns None when the sky is clear or no ceiling layer is present.
@@ -101,7 +102,7 @@ def _obs_time_to_dt(obs_time: int | None) -> datetime | None:
         return None
 
 
-class MetarCoordinator(DataUpdateCoordinator[dict]):
+class MetarCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Fetch METAR data from the Aviation Weather Center API."""
 
     def __init__(
@@ -120,7 +121,7 @@ class MetarCoordinator(DataUpdateCoordinator[dict]):
             update_interval=timedelta(minutes=scan_interval),
         )
 
-    async def _async_update_data(self) -> dict:
+    async def _async_update_data(self) -> dict[str, Any]:
         """Fetch the latest METAR observation and return a normalized dict."""
         params = {"ids": self.station_id, "format": "json"}
         session = async_get_clientsession(self.hass)
@@ -152,7 +153,7 @@ class MetarCoordinator(DataUpdateCoordinator[dict]):
 
         return self._normalize(data[0])
 
-    def _normalize(self, raw: dict) -> dict:  # noqa: PLR0912
+    def _normalize(self, raw: dict[str, Any]) -> dict[str, Any]:  # noqa: PLR0912
         """Extract and coerce every field from the raw API response.
 
         All keys are kept even when None so that sensors can reliably

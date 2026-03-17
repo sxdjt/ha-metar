@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import logging
 import re
+from typing import Any
 
 import voluptuous as vol
 from aiohttp import ClientError, ContentTypeError
 
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_SCAN_INTERVAL
-from homeassistant.core import callback
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
@@ -58,7 +59,7 @@ def _options_schema(current_interval: int) -> vol.Schema:
     )
 
 
-async def _validate_station(hass, station_id: str) -> str | None:
+async def _validate_station(hass: HomeAssistant, station_id: str) -> str | None:
     """Return an error key if the station ID is invalid or unreachable.
 
     Returns None on success.
@@ -103,7 +104,7 @@ class MetarConfigFlow(ConfigFlow, domain=DOMAIN):
         return MetarOptionsFlow()
 
     async def async_step_reconfigure(
-        self, user_input: dict | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Allow the user to change the station ID after initial setup."""
         errors: dict[str, str] = {}
@@ -131,7 +132,7 @@ class MetarConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_user(self, user_input: dict | None = None) -> ConfigFlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle the initial setup step."""
         errors: dict[str, str] = {}
 
@@ -163,7 +164,7 @@ class MetarConfigFlow(ConfigFlow, domain=DOMAIN):
 class MetarOptionsFlow(OptionsFlow):
     """Handle options for an existing METAR config entry."""
 
-    async def async_step_init(self, user_input: dict | None = None) -> ConfigFlowResult:
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Manage the options."""
         current_interval = self.config_entry.data.get(
             CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL

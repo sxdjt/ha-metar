@@ -81,3 +81,12 @@ rules:
   stale-devices:
     status: exempt
     comment: One device per config entry; removing the entry removes the device.
+
+  # ---------------------------------------------------------------------------
+  # Platinum
+  # ---------------------------------------------------------------------------
+  async-dependency:
+    status: exempt
+    comment: No third-party pip dependencies; all I/O uses HA's built-in async aiohttp session directly.
+  inject-websession: done
+  strict-typing: done

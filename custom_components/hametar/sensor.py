@@ -15,6 +15,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import (
     DEGREE,
+    EntityCategory,
     UnitOfLength,
     UnitOfPressure,
     UnitOfSpeed,
@@ -22,7 +23,6 @@ from homeassistant.const import (
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import MetarConfigEntry
@@ -58,7 +58,7 @@ class MetarSensorEntityDescription(SensorEntityDescription):
     name (default True). Set to False for sensors whose name is self-contained.
     """
 
-    value_fn: Callable[[dict], Any]
+    value_fn: Callable[[dict[str, Any]], Any]
 
 
 # ---------------------------------------------------------------------------
@@ -496,7 +496,9 @@ class MetarSensor(MetarEntity, SensorEntity):
         # translation_key links this entity to strings.json and icons.json.
         # _attr_name is kept as a fallback for environments without translations.
         self._attr_translation_key = description.key
-        self._attr_name = description.name
+        # description.name is str | UndefinedType | None; we always pass a str
+        # in SENSOR_DESCRIPTIONS so this cast is safe.
+        self._attr_name = description.name if isinstance(description.name, str) else None
 
     @property
     def suggested_object_id(self) -> str:
