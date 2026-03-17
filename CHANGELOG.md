@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-03-16
+
+### Changed
+
+- Imports corrected to use canonical HA source modules for `DeviceInfo`
+  (`homeassistant.helpers.device_registry`) and `EntityCategory`
+  (`homeassistant.const`).
+- All `dict` type annotations now fully parameterized (`dict[str, Any]`).
+
+### Added
+
+- `py.typed` PEP-561 marker enabling strict mypy type checking.
+- Integration now meets Platinum level on the Home Assistant Integration
+  Quality Scale (`strict-typing` rule satisfied; `async-dependency` exempt
+  as there are no third-party pip dependencies; `inject-websession` done via
+  direct use of `async_get_clientsession`).
+
 ## [1.1.0] - 2026-03-16
 
 ### Added
