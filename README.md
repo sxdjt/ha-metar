@@ -103,7 +103,7 @@ The QNH (altimeter setting) is always presented in both hPa and inHg. US station
 | Time Since Observation | minutes | Calculated | Elapsed minutes since the observation timestamp |
 | Report Type | - | Raw | `METAR` (routine) or `SPECI` (special); diagnostic |
 | Station Elevation | feet | Raw | Static; diagnostic |
-| Raw | - | Full raw METAR string; diagnostic |
+| Raw | - | Raw | Full raw METAR string; diagnostic |
 
 ## Extra State Attributes
 
@@ -150,7 +150,7 @@ Several sensors carry supplemental data as entity attributes.
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
 | Station ID | Yes | - | ICAO station identifier, 3-4 alphanumeric characters (e.g. `KORD`, `EGLL`, `YSSY`). Must be a station with data in the Aviation Weather Center database. |
-| Poll interval | No | 5 | How often to fetch a new observation, in minutes. Minimum 1, no maximum. METARs are issued roughly hourly; values below 5 minutes provide no additional data. |
+| Poll interval | No | 5 | How often to fetch a new observation, in minutes. Minimum 1, maximum 10080 (1 week). METARs are issued roughly hourly; values below 5 minutes provide no additional data. |
 
 The poll interval can be changed after setup via the integration's **Configure** option in Settings -> Devices & Services without removing and re-adding the station.
 
