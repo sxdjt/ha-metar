@@ -343,6 +343,7 @@ _DISABLED_BY_DEFAULT = {
     "pressure_tendency",
     "precip_3hr", "precip_6hr", "precip_24hr",
     "snow_depth",
+    "elevation",
 }
 
 _ENABLED_BY_DEFAULT = {
@@ -350,7 +351,7 @@ _ENABLED_BY_DEFAULT = {
     "wind_gust", "visibility", "cloud_cover", "ceiling",
     "temperature", "temperature_f", "dewpoint", "dewpoint_f",
     "qnh", "altimeter_inhg", "sea_level_pressure",
-    "precip_1hr", "obs_time", "obs_time_local", "time_since_obs", "metar_type", "elevation", "raw_metar",
+    "precip_1hr", "obs_time", "obs_time_local", "time_since_obs", "metar_type", "raw_metar",
 }
 
 

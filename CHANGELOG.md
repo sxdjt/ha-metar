@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-03-18
+
+### Changed
+
+- Station Elevation sensor is now disabled by default. It rarely changes and
+  can be enabled manually if needed.
+
 ## [1.2.0] - 2026-03-16
 
 ### Changed

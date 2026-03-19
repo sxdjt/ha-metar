@@ -451,6 +451,7 @@ SENSOR_DESCRIPTIONS: tuple[MetarSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfLength.FEET,
         device_class=SensorDeviceClass.DISTANCE,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda d: d.get("elevation"),
     ),
 
