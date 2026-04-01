@@ -12,3 +12,4 @@ claude.md
 .vscode/
 .idea/
 *.swp
+.DS_Store
